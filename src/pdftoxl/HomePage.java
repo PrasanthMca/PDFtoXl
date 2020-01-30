@@ -37,7 +37,11 @@ public class HomePage extends javax.swing.JFrame {
                                             "Well_Type","Status","Datum_Elevation","Ground_Elevation",
                                             "Plugback_Depth","Spud_Date","Completion_Date",
                                             "FirstProDate","Total_Depth","Drill_Type","Drill_Started","Drill_Finished"};
-	    private static ArrayList<WellDetails> WellArray =  new ArrayList<>();
+        
+        private static String[] CasingColumns = {"Well ID", "Casing Size", "Nominal Weight","Grade", "Top of Cement","Feet","PSI","SAX"};
+        private static String[] CompletionColumns = {"Well ID", "Completion Type"};
+   
+        private static ArrayList<WellDetails> WellArray =  new ArrayList<>();
     /**
      * Creates new form HomePage
      */
@@ -185,6 +189,7 @@ public class HomePage extends javax.swing.JFrame {
 
          if (location.isDirectory() && location != null) 
          {
+             int PDFCount = 0;
             for (File f : location.listFiles()) 
             {
                if (f.isFile() && f.getName().endsWith(".pdf")) 
@@ -192,9 +197,10 @@ public class HomePage extends javax.swing.JFrame {
             
                 System.out.println("==================================PDF Name "+f.getName()+"==============================");
                  PDTtoTextContent(PDF_PATH+"/"+f.getName());
-
+                PDFCount++;
                 }
            }
+            System.out.println("PDF Count = "+PDFCount);
           WellHeaderSheet();
             }
 	
@@ -225,21 +231,32 @@ public class HomePage extends javax.swing.JFrame {
 	  String drill_started = "";
 	  String drill_finished = "";		 
 		 
-		 
+		 int Casing_and_Cement_Line = 0;
+                 int Liner_line = 0;
 		 //WellArray =  new ArrayList<>();
 		 
 	        try {
 
 	            reader = new PdfReader(aPDFfile);
+                 int NumberOfPages =   reader.getNumberOfPages();
 	            PdfDocument pdfDoc = new PdfDocument();
+                    String OverAllpage ;
+                     String textFromPage2="";
 	            // pageNumber = 1
-	            String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
-	           // String textFromPage2 = PdfTextExtractor.getTextFromPage(reader, 2);
+	            String textFromPageone = PdfTextExtractor.getTextFromPage(reader, 1);
+	              if(NumberOfPages >1)
+                    {
+                    textFromPage2 = PdfTextExtractor.getTextFromPage(reader, 2);
+                   // System.out.println(textFromPage2);
+                    }
 	          
-	            String lines[] = textFromPage.split("\\r?\\n");
-	            System.out.println(textFromPage);
+                    OverAllpage = textFromPageone + textFromPage2;
+	            String lines[] = OverAllpage.split("\\r?\\n");
+	            System.out.println(OverAllpage);
+                    
+                   
 	 
-           
+         
 	            int i = 0 ;
 	            for (String s:lines) {
 	            	
@@ -250,7 +267,8 @@ public class HomePage extends javax.swing.JFrame {
 	        	   String[] splited = s.split(" ");	        	   
 	        	   well_id = splited[2].trim();
 	        	   String[] Spud_Date =APINo.split("Spud Date:");
-	        	   spud_date = Spud_Date[1].trim();	        	   
+	        	   spud_date = Spud_Date[1].trim();	
+                                                  
 	           }
 	           if( s.startsWith("OTC Prod.") ) 
 	           {
@@ -302,15 +320,24 @@ public class HomePage extends javax.swing.JFrame {
 	           }
 	           if( s.startsWith("Location:") ) 
 	           {
+                       try{
 	        	   System.out.println("***************** Well Name *********");
 	        	   String FirstSalesDate = s;
+                           if(FirstSalesDate.contains("First Sales Date:")){
 	        	   String[] splited = FirstSalesDate.split("First Sales Date:");
-	        	   drill_started = splited[1].trim();
+                           drill_started = splited[1].trim();
+                           }
+	        	   
+                       }catch(ArrayIndexOutOfBoundsException ex)
+	        	   {
+	        		 System.out.println("Error in First Sales Date");  
+                                 ex.printStackTrace();
+	        	   }
 	        	   
 	           }
 	           
 	           
-	           if( s.startsWith("Derrick") ) 
+	           if( s.startsWith("Derrick")) 
 	           {
 	        	   System.out.println("***************** Derrick *********");
 	        	   String DerrickData = s;
@@ -369,20 +396,79 @@ public class HomePage extends javax.swing.JFrame {
 	        	   }
 	        	   
 	           }
+//                   if( s.startsWith("Formation Name:") ) 
+//	           {
+//                           String FirstSalesDate = s;
+//	        	   String[] splited = FirstSalesDate.split("Class:");
+//	        	   well_type = splited[1].trim();
+//                           System.out.println("***************** Class Type *********"+well_type);
+//
+//	           }
+                   
+                    if( s.startsWith("Casing and Cement") ) 
+	           {
+	        	 
+                           Casing_and_Cement_Line = i;	  
+                             System.out.println("***************** Completion Type *********"+Casing_and_Cement_Line);
+	           }
+                     if( s.startsWith("Liner") ) 
+	           {
+	        	   
+                           Liner_line = i;	
+                          int GetColumns =  Liner_line - Casing_and_Cement_Line;
+                          if(GetColumns == 4)
+                          {
+                              System.out.println("***************** Two Colums *********"+Liner_line);
+                             // for ( int index =0; Liner_line-1;  )
+                              
+                              
+                          }
+                          else if(GetColumns == 5){
+                           System.out.println("***************** ThreeColums *********"+Liner_line);
+                          }
+                           
+                           
+	           }
+                    if( s.startsWith("X") ) 
+	           {
+	        	   System.out.println("***************** Completion Type *********");
+	        	 
+	        	   
+	           }
+                    
+                    // Second Page content
+                     if( s.startsWith("Formation Name:") ) 
+                         {
+                           String FormationName = s;
+	        	   String[] splited = FormationName.split("Class:");
+	        	   well_type = splited[1].trim();
+                           System.out.println("***************** Class Type *********"+well_type);
+
+                          }
+                      if( s.startsWith("Status:") ) 
+                         {
+                           String Status = s;
+	        	   String getStatus = Status.replaceAll("Status:", "");
+	        	   status = getStatus.trim();
+                           System.out.println("***************** Status *********"+status);
+                          }
+                    
+                    
+                    
 	           
 	           i++;
 
 	            }
-	            WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,"",datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,firstprodate,total_depth,drill_type,drill_started,drill_finished));
+	            WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,well_type,datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,firstprodate,total_depth,drill_type,drill_started,drill_finished));
                     reader.close();
-
+            
 	        } 
                 catch (IOException e) {
 	            e.printStackTrace();
 	        }
 	        catch (ArrayIndexOutOfBoundsException ex)
 	        {
-	        	
+	        	 ex.printStackTrace();
 	        }
 	    }
     
@@ -460,6 +546,24 @@ public class HomePage extends javax.swing.JFrame {
             .setCellValue(well.getDrill_Finished());
             
         }
+        
+        sheet = workbook.createSheet("Casing");
+        Row CasingheaderRow = sheet.createRow(0);
+        
+        for(int i = 0; i < CasingColumns.length; i++) {
+            Cell cell = CasingheaderRow.createCell(i);
+            cell.setCellValue(CasingColumns[i]);
+            cell.setCellStyle(headerCellStyle);
+        }
+        
+        sheet = workbook.createSheet("Completion");
+        Row CompletionheaderRow = sheet.createRow(0);
+        
+        for(int i = 0; i < CompletionColumns.length; i++) {
+            Cell cell = CompletionheaderRow.createCell(i);
+            cell.setCellValue(CompletionColumns[i]);
+            cell.setCellStyle(headerCellStyle);
+        }
        
            try {
         	 FileOutputStream fileOut = new FileOutputStream("WellDetailsNew.xlsx");
@@ -471,7 +575,10 @@ public class HomePage extends javax.swing.JFrame {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
+           
+           
+           
 	}
     
     

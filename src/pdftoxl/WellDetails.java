@@ -189,10 +189,6 @@ public class WellDetails {
 		 this.Drill_Finished = drill_finished2;
 		 
 		 
-		 
-		 
-		 
-		 
 	
 	}
 
