@@ -37,17 +37,14 @@ public class HomePage extends javax.swing.JFrame {
                                             "Well_Type","Status","Datum_Elevation","Ground_Elevation",
                                             "Plugback_Depth","Spud_Date","Completion_Date",
                                             "FirstProDate","Total_Depth","Drill_Type","Drill_Started","Drill_Finished"};
-<<<<<<< Updated upstream
         
         private static String[] CasingColumns = {"Well ID", "Casing Size", "Nominal Weight","Grade", "Top of Cement","Feet","PSI","SAX"};
         private static String[] CompletionColumns = {"Well ID", "Completion Type"};
    
         private static ArrayList<WellDetails> WellArray =  new ArrayList<>();
-=======
+
         private static String[] productionZoneColumns = {"Well ID", "OTC Production Unit No"};
-	    private static ArrayList<WellDetails> WellArray =  new ArrayList<>();
             private static ArrayList<ProductionZoneDetails> productionZone = new ArrayList<>();
->>>>>>> Stashed changes
     /**
      * Creates new form HomePage
      */
@@ -235,15 +232,11 @@ public class HomePage extends javax.swing.JFrame {
 	  String firstprodate = "";
 	  String drill_type = "";
 	  String drill_started = "";
-	  String drill_finished = "";		 
-<<<<<<< Updated upstream
-		 
-		 int Casing_and_Cement_Line = 0;
-                 int Liner_line = 0;
-=======
+	  String drill_finished = "";		 	 
+	  int Casing_and_Cement_Line = 0;
+          int Liner_line = 0;
 	  String OTCProductionUnitNo = "";
 		 
->>>>>>> Stashed changes
 		 //WellArray =  new ArrayList<>();
 		 
 	        try {
@@ -289,6 +282,7 @@ public class HomePage extends javax.swing.JFrame {
 	        	   System.out.println("***************** Finished Date*********");
 	        	   String[] splited = s.split("Finished Date:");
                            if(count ==0)
+                           {
                            for(String s1 : splited)
                            {
                                if(s1.startsWith("OTC Prod."))
@@ -298,6 +292,7 @@ public class HomePage extends javax.swing.JFrame {
                                String[] split = LAST.split("Drilling");    
                               OTCProductionUnitNo = split[0].trim();
                               count++;
+                           }
                            }
 	        	   completion_date = splited[1].trim();
 	        	   }catch(ArrayIndexOutOfBoundsException ex)
@@ -483,12 +478,8 @@ public class HomePage extends javax.swing.JFrame {
 	           i++;
 
 	            }
-<<<<<<< Updated upstream
 	            WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,well_type,datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,firstprodate,total_depth,drill_type,drill_started,drill_finished));
-=======
-	            WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,"",datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,firstprodate,total_depth,drill_type,drill_started,drill_finished));
-                   productionZone.add(new ProductionZoneDetails(well_id, OTCProductionUnitNo));
->>>>>>> Stashed changes
+                    productionZone.add(new ProductionZoneDetails(well_id, OTCProductionUnitNo));
                     reader.close();
             
 	        } 
