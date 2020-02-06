@@ -36,8 +36,7 @@ public class HomePage extends javax.swing.JFrame {
 	private static String[] columns = {"Well ID", "Operator_Name", "Operator_Number","Well_Name", "Well_Number",
                                             "Well_Type","Status","Datum_Elevation","Ground_Elevation",
                                             "Plugback_Depth","Spud_Date","Completion_Date",
-                                            "FirstProDate","Total_Depth","Drill_Type","Drill_Started","Drill_Finished"};
-        
+                                                "FirstProDate","Total_Depth","Drill_Type","Drill_Started","Drill_Finished","PDFName"};        
         private static String[] CasingColumns = {"Well ID", "Casing Size", "Nominal Weight","Grade", "Top of Cement","Feet","PSI","SAX"};
         private static String[] CompletionColumns = {"Well ID", "Completion Type"};
    
@@ -45,6 +44,7 @@ public class HomePage extends javax.swing.JFrame {
 
         private static String[] productionZoneColumns = {"Well ID", "OTC Production Unit No"};
             private static ArrayList<ProductionZoneDetails> productionZone = new ArrayList<>();
+        PdfTableExtract ExtractTables = new PdfTableExtract();	
     /**
      * Creates new form HomePage
      */
@@ -199,8 +199,9 @@ public class HomePage extends javax.swing.JFrame {
                {
             
                 System.out.println("==================================PDF Name "+f.getName()+"==============================");
-                 PDTtoTextContent(PDF_PATH+"/"+f.getName());
-                PDFCount++;
+                  PDTtoTextContent(PDF_PATH+"/"+f.getName(),f.getName());
+                  String GetTableExtract = PdfTableExtract.GetTableExtract(PDF_PATH+"/"+f.getName());
+                    PDFCount++;
                 }
            }
             System.out.println("PDF Count = "+PDFCount);
@@ -211,7 +212,7 @@ public class HomePage extends javax.swing.JFrame {
        }
         
         
-    private static void PDTtoTextContent( String aPDFfile) 
+    private static void PDTtoTextContent( String aPDFfile,String PdfName) 
     {
 
         PdfReader reader;
@@ -478,9 +479,9 @@ public class HomePage extends javax.swing.JFrame {
 	           i++;
 
 	            }
-	            WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,well_type,datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,firstprodate,total_depth,drill_type,drill_started,drill_finished));
-                    productionZone.add(new ProductionZoneDetails(well_id, OTCProductionUnitNo));
-                    reader.close();
+             WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,well_type,datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,firstprodate,total_depth,drill_type,drill_started,drill_finished,PdfName));                   
+              productionZone.add(new ProductionZoneDetails(well_id, OTCProductionUnitNo));      
+             reader.close();
             
 	        } 
                 catch (IOException e) {
@@ -585,6 +586,8 @@ public class HomePage extends javax.swing.JFrame {
             .setCellValue(well.getDrill_Started());
             row.createCell(16)
             .setCellValue(well.getDrill_Finished());
+            row.createCell(17)	
+            .setCellValue(well.getPDFname());
             
         }
         

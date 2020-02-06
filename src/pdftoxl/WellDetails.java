@@ -150,6 +150,13 @@ public class WellDetails {
 	public void setWell_Type(String well_Type) {
 		Well_Type = well_Type;
 	}
+        public String getPDFname() {
+		return PDFName;
+	}
+
+	public void SetPDFname(String pdfname) {
+		PDFName = pdfname;
+	}
 
 	private String Well_Number;
 	 private String Well_Type;
@@ -164,11 +171,12 @@ public class WellDetails {
 	 private String Drill_Type;
 	 private String Drill_Started;
 	 private String Drill_Finished;
+         private String PDFName;
 	
 	 public WellDetails(String well_id2, String operator_name2, String operator_number2, String well_name2,
 			String well_number2, String status2,String classname, String datum_elevation2, String ground_elevation2,
 			String plugback_depth2, String spud_date2, String completion_date2, String firstprodate2,
-			String total_depth2, String drill_type2, String drill_started2, String drill_finished2) {
+			String total_depth2, String drill_type2, String drill_started2, String drill_finished2,String aPDFname) {
 		 
 		 this.Well_ID = well_id2;
 		 this.Operator_Name = operator_name2;
@@ -187,6 +195,7 @@ public class WellDetails {
 		 this.Drill_Type = drill_type2;
 		 this.Drill_Started = drill_started2;
 		 this.Drill_Finished = drill_finished2;
+                 this.PDFName = aPDFname;
 		 
 		 
 	
