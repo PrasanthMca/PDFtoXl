@@ -48,7 +48,7 @@ public class PdfTableExtract {
                 List<Table> FirstPagetables = sea.extract(PageOne);
                 List<Table> SecondPagetables = sea.extract(PageTwo);
 
-                for (Table tables : SecondPagetables) {
+                for (Table tables : FirstPagetables) {
                     List<List<RectangularTextContainer>> rows = tables.getRows();
 
                     for (int i = 0; i < rows.size(); i++) {
