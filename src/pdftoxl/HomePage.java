@@ -11,11 +11,15 @@ import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -23,6 +27,11 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import technology.tabula.ObjectExtractor;
+import technology.tabula.Page;
+import technology.tabula.RectangularTextContainer;
+import technology.tabula.Table;
+import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
 /**
  *
@@ -36,14 +45,22 @@ public class HomePage extends javax.swing.JFrame {
 	private static String[] columns = {"Well ID", "Operator_Name", "Operator_Number","Well_Name", "Well_Number",
                                             "Well_Type","Status","Datum_Elevation","Ground_Elevation",
                                             "Plugback_Depth","Spud_Date","Completion_Date",
-                                                "FirstProDate","Total_Depth","Drill_Type","Drill_Started","Drill_Finished","PDFName"};        
-        private static String[] CasingColumns = {"Well ID", "Casing Size", "Nominal Weight","Grade", "Top of Cement","Feet","PSI","SAX"};
-        private static String[] CompletionColumns = {"Well ID", "Completion Type"};
-   
-        private static ArrayList<WellDetails> WellArray =  new ArrayList<>();
-
+                                            "FirstProDate","Total_Depth","Drill_Type","Drill_Started","Drill_Finished","PDFName"};        
+        private static String[] CasingColumns = {"Well ID", "Type","Casing Size", "Nominal Weight","Grade","Feet","PSI","SAX","Top of Cement","PDFName"};
+        private static String[] CompletionColumns = {"Well ID", "Completion Type","PDFName"};
+        private static String[] FormationColumns = {"Well ID", "Formation","Top MD","PDFName"};
+        private static String[] InitialPotentialColumns = {"Well ID", "Test Date","Oil Volume","Oil Rate","Gas Volume","Gas Rate","Water Volume","Flow_Type","Flow Pressure","Choke","Remark","PDFName"};
         private static String[] productionZoneColumns = {"Well ID", "OTC Production Unit No"};
-            private static ArrayList<ProductionZoneDetails> productionZone = new ArrayList<>();
+        
+        private static ArrayList<WellDetails> WellArray =  new ArrayList<>(); 
+        private static ArrayList<CasingDetails> CasingDetailsArray =  new ArrayList<>();
+        private static ArrayList<Formation> FormationsArray =  new ArrayList<>();
+        private static ArrayList<InitialPotential> InitialPotentialArray =  new ArrayList<>();
+        private static ArrayList<CompletionType> CompletionTypesArrayList =  new ArrayList<>();
+        private static ArrayList<ProductionZoneDetails> productionZone = new ArrayList<>();
+
+
+      
         PdfTableExtract ExtractTables = new PdfTableExtract();	
     /**
      * Creates new form HomePage
@@ -184,7 +201,7 @@ public class HomePage extends javax.swing.JFrame {
     }
     
     
-    	public static void PDFFolder() throws IOException
+    	public  void PDFFolder() throws IOException
 	{
 		//String PDFPAth ="/Users/prashanth_mani/eclipse-workspace/PDF/SampleData";
 		 File  location= new File(PDF_PATH);
@@ -200,7 +217,7 @@ public class HomePage extends javax.swing.JFrame {
             
                 System.out.println("==================================PDF Name "+f.getName()+"==============================");
                   PDTtoTextContent(PDF_PATH+"/"+f.getName(),f.getName());
-                  String GetTableExtract = PdfTableExtract.GetTableExtract(PDF_PATH+"/"+f.getName());
+                  
                     PDFCount++;
                 }
            }
@@ -212,7 +229,7 @@ public class HomePage extends javax.swing.JFrame {
        }
         
         
-    private static void PDTtoTextContent( String aPDFfile,String PdfName) 
+    private  void PDTtoTextContent( String aPDFfile,String PdfName) 
     {
 
         PdfReader reader;
@@ -256,12 +273,8 @@ public class HomePage extends javax.swing.JFrame {
                     }
 	          
                     OverAllpage = textFromPageone + textFromPage2;
-	            String lines[] = OverAllpage.split("\\r?\\n");
-	            System.out.println(OverAllpage);
-                    
-                   
-	 
-         
+	            String lines[] = OverAllpage.split("\\r?\\n");      
+
 	            int i = 0 ;
 	            for (String s:lines) {
 	            	
@@ -449,12 +462,38 @@ public class HomePage extends javax.swing.JFrame {
                            
                            
 	           }
-                    if( s.startsWith("X") ) 
-	           {
-	        	   System.out.println("***************** Completion Type *********");
-	        	 
-	        	   
-	           }
+                  if(s.startsWith("Completion Type")){
+                        String completionTypeOption = "";
+                        boolean typeMatched = false;
+                        System.out.println("***************** Completion Type *********");
+                        if(lines[i+1].startsWith("X")){
+                        String[] completionTypedate1 = lines[i+1].split(" ");
+                        completionTypeOption = completionTypedate1[1].trim() +" "+completionTypedate1[2].trim();
+                        typeMatched = true;
+                    }
+                       
+                        if(lines[i+2].startsWith("X")){
+                        if(typeMatched){
+                            completionTypeOption = completionTypeOption + ",";
+                        }
+                        String[] completionTypedate1 = lines[i+2].split(" ");
+                        completionTypeOption = completionTypedate1[1].trim() +" "+completionTypedate1[2].trim();
+                        typeMatched = true;
+                    }
+                        if(lines[i+3].startsWith("X")){
+                        if(typeMatched){
+                            completionTypeOption = completionTypeOption + ",";
+                        }
+                        String[] completionTypedate1 = lines[i+3].split(" ");
+                        completionTypeOption = completionTypedate1[1].trim();
+                        typeMatched = true;
+                    }
+                        
+                       // completionTypeSet.setCompletionType(completionTypeOption);
+                      
+                      CompletionTypesArrayList.add( new CompletionType(well_id,completionTypeOption,PdfName ));
+
+                    }
                     
                     // Second Page content
                      if( s.startsWith("Formation Name:") ) 
@@ -473,8 +512,7 @@ public class HomePage extends javax.swing.JFrame {
                            System.out.println("***************** Status *********"+status);
                           }
                     
-                    
-                    
+                  
 	           
 	           i++;
 
@@ -482,7 +520,7 @@ public class HomePage extends javax.swing.JFrame {
              WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,well_type,datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,firstprodate,total_depth,drill_type,drill_started,drill_finished,PdfName));                   
               productionZone.add(new ProductionZoneDetails(well_id, OTCProductionUnitNo));      
              reader.close();
-            
+            String GetTableExtract = GetTableExtract(aPDFfile, PdfName ,well_id);
 	        } 
                 catch (IOException e) {
 	            e.printStackTrace();
@@ -504,7 +542,11 @@ public class HomePage extends javax.swing.JFrame {
 
         // Create a Sheet
         Sheet sheet = workbook.createSheet("WellHeader");
+        Sheet Casingsheet = workbook.createSheet("Casing");
+        Sheet Completionsheet = workbook.createSheet("Completion");
         Sheet ProductionZoneSheet = workbook.createSheet("ProductionZone");
+        Sheet FormationSheet = workbook.createSheet("Formation");
+        Sheet InitialPotentialSheet = workbook.createSheet("Initial Potential");
 
 //           Create a Font for styling header cells
 //           Font headerFont = workbook.createFont();
@@ -591,8 +633,9 @@ public class HomePage extends javax.swing.JFrame {
             
         }
         
-        sheet = workbook.createSheet("Casing");
-        Row CasingheaderRow = sheet.createRow(0);
+        
+        
+        Row CasingheaderRow = Casingsheet.createRow(0);
         
         for(int i = 0; i < CasingColumns.length; i++) {
             Cell cell = CasingheaderRow.createCell(i);
@@ -600,32 +643,339 @@ public class HomePage extends javax.swing.JFrame {
             cell.setCellStyle(headerCellStyle);
         }
         
-        sheet = workbook.createSheet("Completion");
-        Row CompletionheaderRow = sheet.createRow(0);
+        int CasingRow =1 ;
+         for(CasingDetails Casing :CasingDetailsArray)
+         {
+             Row row = Casingsheet.createRow(CasingRow++);
+             row.createCell(0)
+                    .setCellValue(Casing.getWell_Number());
+             row.createCell(1)
+                    .setCellValue(Casing.getType());
+              row.createCell(2)
+                    .setCellValue(Casing.getSize());
+              row.createCell(3)
+                    .setCellValue(Casing.getWeight());
+              row.createCell(4)
+                    .setCellValue(Casing.getGrade());
+              row.createCell(5)
+                    .setCellValue(Casing.getFeet());
+              row.createCell(6)
+                    .setCellValue(Casing.getPSI());
+               row.createCell(7)
+                    .setCellValue(Casing.getSAX());
+               row.createCell(8)
+                    .setCellValue(Casing.getTopofCMT());
+               row.createCell(9)
+                    .setCellValue(Casing.getPdfFileName());
+         }
+        
+        // ******************** Completion Content ***********************
+        
+        Row CompletionheaderRow = Completionsheet.createRow(0);
         
         for(int i = 0; i < CompletionColumns.length; i++) {
             Cell cell = CompletionheaderRow.createCell(i);
             cell.setCellValue(CompletionColumns[i]);
             cell.setCellStyle(headerCellStyle);
         }
+        
+         int completerow = 1;
+        for(CompletionType completiontType: CompletionTypesArrayList) {
+            Row row = Completionsheet.createRow(completerow++);
+            row.createCell(0)
+                    .setCellValue(completiontType.getAPINo());
+
+            row.createCell(1)
+                    .setCellValue(completiontType.getCompletionType());
+            row.createCell(2)
+                    .setCellValue(completiontType.getPDfName());
+        }
+      // ******************************************************************
+
+        
+        // ******************** Formation Content ***********************
+        
+         Row FormationHeader = FormationSheet.createRow(0);
+        
+        for(int i = 0; i < FormationColumns.length; i++) {
+            Cell cell = FormationHeader.createCell(i);
+            cell.setCellValue(FormationColumns[i]);
+            cell.setCellStyle(headerCellStyle);
+        }
+        
+        int FormationRow = 1 ;
+         for(Formation formation :FormationsArray)
+         {
+             Row row = FormationSheet.createRow(FormationRow++);
+             row.createCell(0)
+                    .setCellValue(formation.getWell_ID());
+             row.createCell(1)
+                    .setCellValue(formation.getFormation());
+              row.createCell(2)
+                    .setCellValue(formation.getTop());
+              row.createCell(3)
+                    .setCellValue(formation.getPDFName());
+         }
+         
+      // ******************************************************************
+      
+      
+      
+       // ******************** Initial Potential ***********************
+       
+        Row InitialPotentialHeader = InitialPotentialSheet.createRow(0);
+        
+        for(int i = 0; i < InitialPotentialColumns.length; i++) {
+            Cell cell = InitialPotentialHeader.createCell(i);
+            cell.setCellValue(InitialPotentialColumns[i]);
+            cell.setCellStyle(headerCellStyle);
+        }
+        
+            int InitialPotentialRow = 1 ;
+         for(InitialPotential initialPotential :InitialPotentialArray)
+         {
+             Row row = InitialPotentialSheet.createRow(InitialPotentialRow++);
+             row.createCell(0)
+                    .setCellValue(initialPotential.getWell_ID());
+             row.createCell(1)
+                    .setCellValue(initialPotential.getTesData());
+              row.createCell(2)
+                    .setCellValue(initialPotential.getOilVolume());
+              row.createCell(3)
+                    .setCellValue(initialPotential.getOilRate());
+              row.createCell(4)
+                    .setCellValue(initialPotential.getGasVolume());
+             row.createCell(5)
+                    .setCellValue(initialPotential.getGasRate());
+              row.createCell(6)
+                    .setCellValue(initialPotential.getWaterVolume());
+              row.createCell(7)
+                    .setCellValue(initialPotential.getFlowType());
+               row.createCell(8)
+                    .setCellValue(initialPotential.getFlowPressure());
+              row.createCell(9)
+                    .setCellValue(initialPotential.getChoke());
+              row.createCell(10)
+                    .setCellValue(initialPotential.getRemark());
+              row.createCell(10)
+                    .setCellValue(initialPotential.getPDFName());
+         }
+      
+      // ******************************************************************
+      
+         String currentDate = null;
+        String fileName = "WellDetailsNew";
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");           
+        Date date = new Date();  
+        currentDate = formatter.format(date);
+        fileName = fileName+"("+currentDate+")";
        
            try {
-        	 FileOutputStream fileOut = new FileOutputStream("WellDetailsNew.xlsx");
+        	 FileOutputStream fileOut = new FileOutputStream(fileName+".xlsx");
                  workbook.write(fileOut);
 		fileOut.close();
 	        // Closing the workbook
 	        workbook.close();
+                
+                // ---- Clear all Array list
+               WellArray.clear();
+               CasingDetailsArray.clear();
+               FormationsArray .clear();
+               InitialPotentialArray.clear();
+               CompletionTypesArrayList.clear();
+               productionZone.clear();
+
+                
+                
                 JOptionPane.showMessageDialog(null, "Completed");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-           
-           
-           
+		}      
 	}
     
-    
+     public  String GetTableExtract(String aPDFfile, String PdfName, String well_id) {
+        try {
+            // TODO Auto-generated method stub
+
+            PDDocument pd = PDDocument.load(new File(aPDFfile));
+            boolean Start_read = false  ;
+            int totalPages = pd.getNumberOfPages();
+            System.out.println("Total Pages in Document: " + totalPages);
+            if (totalPages > 1) {
+                ObjectExtractor oe = new ObjectExtractor(pd);
+                SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
+                 SpreadsheetExtractionAlgorithm PageTWoAlgorithm = new SpreadsheetExtractionAlgorithm();
+                Page PageOne = oe.extract(1);
+                Page PageTwo = oe.extract(2);
+                boolean fasle;
+
+                // extract text from the table after detecting
+                List<Table> FirstPagetables = sea.extract(PageOne);
+                List<Table> SecondPagetables = PageTWoAlgorithm.extract(PageTwo);
+
+                for (Table tables : FirstPagetables) {
+                    List<List<RectangularTextContainer>> rows = tables.getRows();
+
+                    for (int i = 0; i < rows.size(); i++) {
+
+                        List<RectangularTextContainer> cells = rows.get(i);
+
+                        if(cells.get(0).getText().equals("Casing and Cement"))
+                        {
+                            Start_read =true ;
+                        }
+                        if(cells.get(0).getText().equals("Liner"))
+                        {
+                            Start_read =false ;
+                        }
+                        
+                        if(Start_read)
+                        {
+                            
+                             String Well_Number="";
+                             String Type="@";
+                             String Size="";
+                             String Weight="";
+                             String Grade="";
+                             String Feet="";
+                             String PSI="";
+                             String SAX="";
+                             String TopofCMT="";
+                            
+                        if(cells.size() > 7) {
+         
+                            if(!cells.get(0).getText().equals("Type") && !cells.get(0).getText().equals("Casing and Cement") &&!cells.get(0).getText().equals(" ") )
+                            {
+                               // System.out.print(cells.get(j).getText() + "|");
+                              Type    =     cells.get(0).getText();
+                              Size    =     cells.get(1).getText();
+                              Weight  =     cells.get(2).getText();
+                              Grade   =     cells.get(3).getText();
+                              Feet    =     cells.get(4).getText();
+                              PSI     =     cells.get(5).getText();
+                              SAX     =     cells.get(6).getText();
+                              TopofCMT=     cells.get(7).getText();  
+                            }
+                            if(!Type.equals("@"))
+                            CasingDetailsArray.add(new CasingDetails(Type,Size,Weight,Grade,Feet,PSI,SAX,TopofCMT,well_id,PdfName));
+                        }
+                        
+                        
+                        }
+                    }
+                }
+                
+                // ------------- Read Second Page Tables -----------------
+                
+                boolean ReadFormation = false;
+                boolean ReadIntialTest = false;
+            for (Table tables : SecondPagetables) {
+                    List<List<RectangularTextContainer>> rows = tables.getRows();
+                    
+                     
+
+                    for (int i = 0; i < rows.size(); i++) {
+
+                        List<RectangularTextContainer> cells = rows.get(i);
+                        System.out.println("-->"+cells.get(0).getText());
+
+                                
+                         if(cells.get(0).getText().equals("Test Date") )
+                        {
+                            ReadIntialTest =true ;
+                        }
+                          if(cells.get(0).getText().equals("Completion and Test Data by Producing Formation"))
+                        {
+                            ReadIntialTest =false ;
+                        }
+                         
+                         if(ReadIntialTest)
+                         {
+                             String TesData = "@";
+                             String OilVolume = "";
+                             String OilRate = "";
+                             String GasVolume = "";
+                             String GasRate = "";
+                             String WaterVolume = "";
+                             String FlowType = "";
+                             String FlowPressure = "";
+                             String Choke = "";
+                             String BHPressure = "";
+                             String Remark = "";
+                             String PDFName = "";
+
+                              if(cells.size()>10) {
+                                  
+                            if(!cells.get(0).getText().equals("Pressure") && !cells.get(0).getText().equals("Completion and Test Data by Producing Formation") &&
+                                    !cells.get(0).getText().equals("Test Date") && !cells.get(0).getText().equals(" "))
+                            {
+                         
+                                       TesData = cells.get(0).getText();
+                                       OilVolume = cells.get(2).getText();
+                                       OilRate = cells.get(3).getText();
+                                       GasVolume = cells.get(4).getText();
+                                       GasRate = cells.get(5).getText();
+                                       WaterVolume = cells.get(6).getText();
+                                       FlowType = cells.get(7).getText();                         
+                                       FlowPressure = cells.get(8).getText();
+                                       Choke = cells.get(9).getText();
+                                       BHPressure =cells.get(10).getText();
+                                      // Remark = cells.get(10).getText();
+                             
+                               System.out.print(cells.get(0).getText() + "|");    
+                                
+                            }
+                            if(!TesData.equals("@"))
+                            InitialPotentialArray.add(new InitialPotential(well_id,TesData,OilVolume,OilRate,GasVolume,GasRate,WaterVolume,FlowType,FlowPressure,Choke,BHPressure,Remark,PdfName));
+
+
+                        }
+                        }
+
+                        if(cells.get(0).getText().equals("Formation"))
+                        {
+                            ReadFormation =true ;
+                        }
+                        if(cells.get(0).getText().equals("Other Remarks"))
+                        {
+                            ReadFormation =false ;
+                        }
+                        
+                        if(ReadFormation)
+                        {                     
+                             String Formation="@";
+                             String Top="";                       
+                            if(cells.size()>1)
+                                {
+                            if(!cells.get(0).getText().equals("Formation") && !cells.get(0).getText().equals(" "))
+                            {
+                                 System.out.print(cells.get(0).getText() + "|");  
+                                 Formation = cells.get(0).getText();
+                                 Top = cells.get(1).getText();
+                                 
+                            }
+                             if(!Formation.equals("@"))
+                            FormationsArray.add(new Formation(well_id,Formation,Top,PdfName));
+                              
+                        }
+                            
+                        }
+                        
+                        
+
+                       
+                    }
+                }
+            
+            
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(PdfTableExtract.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+           
     
     
 }

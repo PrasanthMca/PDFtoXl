@@ -24,15 +24,14 @@ import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
  */
 public class PdfTableExtract {
 
-    public PdfTableExtract() {
+  
 
-    }
-
-    public static String GetTableExtract(String FileName) {
-        try {
+    public static void main(String args[]) {
+        try 
+        {
             // TODO Auto-generated method stub
-            //final String FILENAME="/Users/prashanth_mani/PDFSamples/1DD99645.pdf";
 
+            String FileName ="/Users/prashanth_mani/PDFSamples/1DDA7F83.pdf";
             PDDocument pd = PDDocument.load(new File(FileName));
             boolean Start_read = false  ;
             int totalPages = pd.getNumberOfPages();
@@ -40,40 +39,41 @@ public class PdfTableExtract {
             if (totalPages > 1) {
                 ObjectExtractor oe = new ObjectExtractor(pd);
                 SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
+                SpreadsheetExtractionAlgorithm PageTWoAlgorithm = new SpreadsheetExtractionAlgorithm();
                 Page PageOne = oe.extract(1);
                 Page PageTwo = oe.extract(2);
                 boolean fasle;
 
                 // extract text from the table after detecting
                 List<Table> FirstPagetables = sea.extract(PageOne);
-                List<Table> SecondPagetables = sea.extract(PageTwo);
+                List<Table> SecondPagetables = PageTWoAlgorithm.extract(PageTwo);
 
-                for (Table tables : FirstPagetables) {
+                for (Table tables : SecondPagetables) {
                     List<List<RectangularTextContainer>> rows = tables.getRows();
 
                     for (int i = 0; i < rows.size(); i++) {
 
                         List<RectangularTextContainer> cells = rows.get(i);
 
-                        if(cells.get(0).getText().equals("Casing and Cement"))
-                        {
-                            Start_read =true ;
-                        }
-                        if(cells.get(0).getText().equals("Liner"))
-                        {
-                            Start_read =false ;
-                        }
+//                        if(cells.get(0).getText().equals("Casing and Cement"))
+//                        {
+//                            Start_read =true ;
+//                        }
+//                        if(cells.get(0).getText().equals("Liner"))
+//                        {
+//                            Start_read =false ;
+//                        }
                         
-                        if(Start_read)
-                        {
+                        
                         for (int j = 0; j < cells.size(); j++) {
            
-                            System.out.print(cells.get(j).getText() + "|");
-                            cells.listIterator();
-                        }
+                            
+                         
+                                System.out.print(cells.get(j).getText() + "|");
+            
+
                         }
                         
-
                         System.out.println();
                     }
                 }
@@ -81,6 +81,6 @@ public class PdfTableExtract {
         } catch (IOException ex) {
             Logger.getLogger(PdfTableExtract.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "";
+  
     }
 }
