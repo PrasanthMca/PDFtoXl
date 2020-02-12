@@ -58,7 +58,7 @@ public class HomePage extends javax.swing.JFrame {
         private static ArrayList<InitialPotential> InitialPotentialArray =  new ArrayList<>();
         private static ArrayList<CompletionType> CompletionTypesArrayList =  new ArrayList<>();
         private static ArrayList<ProductionZoneDetails> productionZone = new ArrayList<>();
-
+       String Remark = "";
 
       
         PdfTableExtract ExtractTables = new PdfTableExtract();	
@@ -254,7 +254,7 @@ public class HomePage extends javax.swing.JFrame {
 	  int Casing_and_Cement_Line = 0;
           int Liner_line = 0;
 	  String OTCProductionUnitNo = "";
-		 
+	  Remark =""; 
 		 //WellArray =  new ArrayList<>();
 		 
 	        try {
@@ -269,7 +269,7 @@ public class HomePage extends javax.swing.JFrame {
 	              if(NumberOfPages >1)
                     {
                     textFromPage2 = PdfTextExtractor.getTextFromPage(reader, 2);
-                   // System.out.println(textFromPage2);
+//                    System.out.println(textFromPage2);
                     }
 	          
                     OverAllpage = textFromPageone + textFromPage2;
@@ -429,37 +429,25 @@ public class HomePage extends javax.swing.JFrame {
 	        	   }
 	        	   
 	           }
-//                   if( s.startsWith("Formation Name:") ) 
-//	           {
-//                           String FirstSalesDate = s;
-//	        	   String[] splited = FirstSalesDate.split("Class:");
-//	        	   well_type = splited[1].trim();
-//                           System.out.println("***************** Class Type *********"+well_type);
-//
-//	           }
+
                    
-                    if( s.startsWith("Casing and Cement") ) 
+                    if( s.startsWith("Other Remarks") ) 
 	           {
 	        	 
                            Casing_and_Cement_Line = i;	  
-                             System.out.println("***************** Completion Type *********"+Casing_and_Cement_Line);
 	           }
-                     if( s.startsWith("Liner") ) 
+                     if( s.startsWith("Lateral Holes") ||s.startsWith("FOR COMMISSION USE ONLY")  ) 
 	           {
 	        	   
-                           Liner_line = i;	
+                           Liner_line = i;
+                        
                           int GetColumns =  Liner_line - Casing_and_Cement_Line;
-                          if(GetColumns == 4)
+                          
+                          for(int index = Casing_and_Cement_Line+1;index<Liner_line;index++)
                           {
-                              System.out.println("***************** Two Colums *********"+Liner_line);
-                             // for ( int index =0; Liner_line-1;  )
-                              
-                              
+                             Remark = Remark+lines[index];
                           }
-                          else if(GetColumns == 5){
-                           System.out.println("***************** ThreeColums *********"+Liner_line);
-                          }
-                           
+                                                    
                            
 	           }
                   if(s.startsWith("Completion Type")){
@@ -547,7 +535,6 @@ public class HomePage extends javax.swing.JFrame {
         Sheet ProductionZoneSheet = workbook.createSheet("ProductionZone");
         Sheet FormationSheet = workbook.createSheet("Formation");
         Sheet InitialPotentialSheet = workbook.createSheet("Initial Potential");
-
 //           Create a Font for styling header cells
 //           Font headerFont = workbook.createFont();
 //           headerFont.setBold(true);
@@ -757,7 +744,7 @@ public class HomePage extends javax.swing.JFrame {
                     .setCellValue(initialPotential.getChoke());
               row.createCell(10)
                     .setCellValue(initialPotential.getRemark());
-              row.createCell(10)
+              row.createCell(11)
                     .setCellValue(initialPotential.getPDFName());
          }
       
@@ -870,6 +857,8 @@ public class HomePage extends javax.swing.JFrame {
                 
                 boolean ReadFormation = false;
                 boolean ReadIntialTest = false;
+             
+                
             for (Table tables : SecondPagetables) {
                     List<List<RectangularTextContainer>> rows = tables.getRows();
                     
@@ -902,7 +891,7 @@ public class HomePage extends javax.swing.JFrame {
                              String FlowPressure = "";
                              String Choke = "";
                              String BHPressure = "";
-                             String Remark = "";
+                            
                              String PDFName = "";
 
                               if(cells.size()>10) {
@@ -926,6 +915,8 @@ public class HomePage extends javax.swing.JFrame {
                                System.out.print(cells.get(0).getText() + "|");    
                                 
                             }
+                            
+                           
                             if(!TesData.equals("@"))
                             InitialPotentialArray.add(new InitialPotential(well_id,TesData,OilVolume,OilRate,GasVolume,GasRate,WaterVolume,FlowType,FlowPressure,Choke,BHPressure,Remark,PdfName));
 
@@ -941,6 +932,7 @@ public class HomePage extends javax.swing.JFrame {
                         {
                             ReadFormation =false ;
                         }
+                       
                         
                         if(ReadFormation)
                         {                     

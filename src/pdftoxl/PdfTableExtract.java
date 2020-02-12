@@ -31,7 +31,7 @@ public class PdfTableExtract {
         {
             // TODO Auto-generated method stub
 
-            String FileName ="/Users/prashanth_mani/PDFSamples/1DDA7F83.pdf";
+            String FileName ="/Users/prashanth_mani/Desktop/Test/1DDA7F7A.pdf";
             PDDocument pd = PDDocument.load(new File(FileName));
             boolean Start_read = false  ;
             int totalPages = pd.getNumberOfPages();
@@ -42,7 +42,7 @@ public class PdfTableExtract {
                 SpreadsheetExtractionAlgorithm PageTWoAlgorithm = new SpreadsheetExtractionAlgorithm();
                 Page PageOne = oe.extract(1);
                 Page PageTwo = oe.extract(2);
-                boolean fasle;
+                boolean Start_perforation =  false;
 
                 // extract text from the table after detecting
                 List<Table> FirstPagetables = sea.extract(PageOne);
@@ -55,25 +55,25 @@ public class PdfTableExtract {
 
                         List<RectangularTextContainer> cells = rows.get(i);
 
-//                        if(cells.get(0).getText().equals("Casing and Cement"))
+//                        if(cells.get(0).getText().equals("Order No"))
 //                        {
-//                            Start_read =true ;
+//                            Start_perforation =true ;
 //                        }
-//                        if(cells.get(0).getText().equals("Liner"))
+//                        if(cells.get(0).getText().equals("Acid Volumes"))
 //                        {
-//                            Start_read =false ;
-//                        }
-                        
-                        
+//                            Start_perforation =false ;
+//                        } 
+//                      
+//                      if(Start_perforation)  
                         for (int j = 0; j < cells.size(); j++) {
-           
-                            
-                         
+             // if(!cells.get(0).getText().equals("Order No") )
+                          
+  
                                 System.out.print(cells.get(j).getText() + "|");
             
 
                         }
-                        
+                   
                         System.out.println();
                     }
                 }
