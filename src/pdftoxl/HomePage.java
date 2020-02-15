@@ -31,6 +31,7 @@ import technology.tabula.ObjectExtractor;
 import technology.tabula.Page;
 import technology.tabula.RectangularTextContainer;
 import technology.tabula.Table;
+import technology.tabula.extractors.BasicExtractionAlgorithm;
 import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
 /**
@@ -958,6 +959,85 @@ public class HomePage extends javax.swing.JFrame {
 
                        
                     }
+                }
+            
+            
+            
+        //   -------- -------- -------- --------  Read Perforation --------
+            
+              boolean Start_perforationInt =  false;
+                boolean StartReadAcidval = false;
+                
+                String OrderNo ="";
+                String From ="";
+                String To ="";
+                String FractureTreatments ="";
+                String AcidVolumes ="";                  
+   
+                BasicExtractionAlgorithm bea = new BasicExtractionAlgorithm();
+                
+                
+                List<Table> SecondPagetablesForPerforation = bea.extract(PageTwo);
+
+                for (Table tables : SecondPagetablesForPerforation) {
+                    List<List<RectangularTextContainer>> rows = tables.getRows();
+
+                    for (int i = 0; i < rows.size(); i++) {
+
+                        List<RectangularTextContainer> cells = rows.get(i);
+
+                        if(cells.get(0).getText().equals("Order No Unit Size"))
+                        {
+                            Start_perforationInt =true ;
+                        }   
+                        if(cells.get(0).getText().startsWith("Acid Volumes"))
+                        {
+                            Start_perforationInt =false ;
+                            StartReadAcidval =true;
+                        } 
+                         if(cells.get(0).getText().startsWith("Formation Name:"))
+                        {
+                            StartReadAcidval =false;
+                        } 
+                        
+                        
+                      
+                      if(Start_perforationInt)  
+                      { 
+                      if((!cells.get(0).getText().startsWith("Order No Unit Size") ) && (!cells.get(0).getText().startsWith("Acid Volumes") ) )
+                     if(cells.size()>5) 
+                    {
+                            
+                      if((cells.get(0).getText().equalsIgnoreCase("There are no Spacing Order records to display."))){
+                            OrderNo  = cells.get(0).getText();
+                            From     =  cells.get(2).getText();
+                            To       =    cells.get(4).getText();
+                    
+                        }
+                         else{
+                          String ORdernum = cells.get(0).getText();
+                          String[] getOrderNumberOnly = ORdernum.split(" ");
+                            OrderNo  = getOrderNumberOnly[0];
+                            From     =  cells.get(2).getText();
+                            To       =  cells.get(4).getText();
+                          }
+                         
+                       }
+                        }
+                       if(StartReadAcidval)  
+                      { 
+                      if((!cells.get(0).getText().startsWith("Acid Volumes") ) && (!cells.get(0).getText().startsWith("Formation Name:") ) )
+                        if (  cells.size()>3) {   
+                            
+                            AcidVolumes =cells.get(0).getText();
+                            FractureTreatments = cells.get(3).getText();
+               System.out.print(cells.get(3).getText() + ":");
+                          }
+                        }
+         
+                    }
+                    
+   
                 }
             
             
