@@ -52,13 +52,15 @@ public class HomePage extends javax.swing.JFrame {
         private static String[] FormationColumns = {"Well ID", "Formation","Top MD","PDFName"};
         private static String[] InitialPotentialColumns = {"Well ID", "Test Date","Oil Volume","Oil Rate","Gas Volume","Gas Rate","Water Volume","Flow_Type","Flow Pressure","Choke","Remark","PDFName"};
         private static String[] productionZoneColumns = {"Well ID", "OTC Production Unit No"};
-        
+        private static String[] PerforationColumns = {"Well ID", "Top Depth","Base Depth","Spacing Order","Remarks","Acid Volumes","PDFName"};
+
         private static ArrayList<WellDetails> WellArray =  new ArrayList<>(); 
         private static ArrayList<CasingDetails> CasingDetailsArray =  new ArrayList<>();
         private static ArrayList<Formation> FormationsArray =  new ArrayList<>();
         private static ArrayList<InitialPotential> InitialPotentialArray =  new ArrayList<>();
         private static ArrayList<CompletionType> CompletionTypesArrayList =  new ArrayList<>();
         private static ArrayList<ProductionZoneDetails> productionZone = new ArrayList<>();
+        private static ArrayList<Perforation> PerforationArray = new ArrayList<>();
        String Remark = "";
 
       
@@ -536,6 +538,8 @@ public class HomePage extends javax.swing.JFrame {
         Sheet ProductionZoneSheet = workbook.createSheet("ProductionZone");
         Sheet FormationSheet = workbook.createSheet("Formation");
         Sheet InitialPotentialSheet = workbook.createSheet("Initial Potential");
+        Sheet PerforationSheet = workbook.createSheet("Perforation");
+
 //           Create a Font for styling header cells
 //           Font headerFont = workbook.createFont();
 //           headerFont.setBold(true);
@@ -751,6 +755,39 @@ public class HomePage extends javax.swing.JFrame {
       
       // ******************************************************************
       
+      
+      
+       Row PerforationHeader = PerforationSheet.createRow(0);
+        
+        for(int i = 0; i < PerforationColumns.length; i++) {
+            Cell cell = PerforationHeader.createCell(i);
+            cell.setCellValue(PerforationColumns[i]);
+            cell.setCellStyle(headerCellStyle);
+        }
+       int PerforationRow = 1 ;
+       for(Perforation aPerforation :PerforationArray)
+         {
+             Row row = PerforationSheet.createRow(PerforationRow++);
+             row.createCell(0)
+                    .setCellValue(aPerforation.getWell_ID());
+             row.createCell(1)
+                    .setCellValue(aPerforation.getFrom());
+              row.createCell(2)
+                    .setCellValue(aPerforation.getTo());
+              row.createCell(3)
+                    .setCellValue(aPerforation.getOrderNo());
+              row.createCell(4)
+                    .setCellValue(aPerforation.getFractureTreatments());
+             row.createCell(5)
+                    .setCellValue(aPerforation.getAcidVolumes());
+              row.createCell(6)
+                    .setCellValue(aPerforation.getPDFName());          
+
+         }
+      
+      // ******************************************************************
+
+      
          String currentDate = null;
         String fileName = "WellDetailsNew";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");           
@@ -797,6 +834,7 @@ public class HomePage extends javax.swing.JFrame {
                 Page PageOne = oe.extract(1);
                 Page PageTwo = oe.extract(2);
                 boolean fasle;
+               
 
                 // extract text from the table after detecting
                 List<Table> FirstPagetables = sea.extract(PageOne);
@@ -968,7 +1006,7 @@ public class HomePage extends javax.swing.JFrame {
               boolean Start_perforationInt =  false;
                 boolean StartReadAcidval = false;
                 
-                String OrderNo ="";
+                String OrderNo ="@";
                 String From ="";
                 String To ="";
                 String FractureTreatments ="";
@@ -995,7 +1033,12 @@ public class HomePage extends javax.swing.JFrame {
                             Start_perforationInt =false ;
                             StartReadAcidval =true;
                         } 
-                         if(cells.get(0).getText().startsWith("Formation Name:"))
+                        
+                         if(cells.get(0).getText().startsWith("Formation Name:") )
+                        {
+                            StartReadAcidval =false;
+                        } 
+                         if(cells.get(0).getText().startsWith("Formation") )
                         {
                             StartReadAcidval =false;
                         } 
@@ -1034,7 +1077,13 @@ public class HomePage extends javax.swing.JFrame {
                System.out.print(cells.get(3).getText() + ":");
                           }
                         }
-         
+                       
+                    if((StartReadAcidval == true) || (Start_perforationInt == true))
+                    {  
+                        if(!OrderNo.equals("@"))
+                        PerforationArray.add(new Perforation(well_id,From,To,OrderNo,FractureTreatments,AcidVolumes,PdfName));
+                    }
+         System.out.print("");
                     }
                     
    

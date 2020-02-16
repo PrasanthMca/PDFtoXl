@@ -80,7 +80,7 @@ public class PdfTableExtract {
                         } 
                         
                           String OrderNo ="";
-                        String From ="";
+                            String From ="";
                              String To ="";
                             String FractureTreatments ="";
                              String AcidVolumes ="";     
@@ -118,11 +118,11 @@ public class PdfTableExtract {
                           }
                         }
                          System.out.println(OrderNo+":"+From+":"+To+":"+AcidVolumes+":"+FractureTreatments);
-                         
-                    
-                       
-                       
-         
+           
+                    }
+                    if(StartReadAcidval || Start_perforationInt)
+                    {
+                        
                     }
                     
    

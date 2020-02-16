@@ -12,6 +12,34 @@ package pdftoxl;
 public class Perforation {
 
     /**
+     * @return the PDFName
+     */
+    public String getPDFName() {
+        return PDFName;
+    }
+
+    /**
+     * @param PDFName the PDFName to set
+     */
+    public void setPDFName(String PDFName) {
+        this.PDFName = PDFName;
+    }
+
+    Perforation(String awell_id, String aFrom, String aTo, String aOrderNo, String aFractureTreatments, String aAcidVolumes, String aPdfName) {
+
+         this.Well_ID = awell_id;
+           this.From =aFrom;
+	   this.To =aTo;
+	   this.OrderNo = aOrderNo;
+	   this.FractureTreatments =aFractureTreatments;
+           this.AcidVolumes = aAcidVolumes;
+           this.PDFName = aPdfName;
+
+    }
+
+ 
+
+    /**
      * @return the Well_ID
      */
     public String getWell_ID() {
@@ -101,6 +129,7 @@ public class Perforation {
 	 private String OrderNo;
 	 private String FractureTreatments;
          private String AcidVolumes;
+         private String PDFName;
 	
     
     
