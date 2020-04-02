@@ -45,8 +45,8 @@ public class HomePage extends javax.swing.JFrame {
 
 	private static String[] columns = {"Well ID", "Operator_Name", "Operator_Number","Well_Name", "Well_Number",
                                             "Well_Type","Status","Datum_Elevation","Ground_Elevation",
-                                            "Plugback_Depth","Spud_Date","Completion_Date",
-                                            "FirstProDate","Total_Depth","Drill_Type","Drill_Started","Drill_Finished","PDFName"};        
+                                            "Plugback_Depth","Spud_Date","Completion_Date","ReCompletion_Date",
+                                            "FirstProDate","Total_Depth","Drill_Type","Drill_Started","Drill_Finished","PDFName","Amended","Permit Number","Permit Date"};        
         private static String[] CasingColumns = {"Well ID", "Type","Casing Size", "Nominal Weight","Grade","Feet","PSI","SAX","Top of Cement","PDFName"};
         private static String[] CompletionColumns = {"Well ID", "Completion Type","PDFName"};
         private static String[] FormationColumns = {"Well ID", "Formation","Top MD","PDFName"};
@@ -54,6 +54,13 @@ public class HomePage extends javax.swing.JFrame {
         private static String[] productionZoneColumns = {"Well ID", "OTC Production Unit No"};
         private static String[] PerforationColumns = {"Well ID", "Top Depth","Base Depth","Spacing Order","Remarks","Acid Volumes","PDFName"};
 
+        private static String[] LinerColumns = {"Well ID", "Type","Size","Weight","Grade","Length","PSI","SAX","Top Depth","Bottom Depth","PDFName"};
+        private static String[] PackerColumns = {"Well ID", "Depth","Brand & Type","PDFName"};
+        private static String[] PlugColumns = {"Well ID", "Depth","Plug Type","PDFName"};
+  
+        
+        
+        
         private static ArrayList<WellDetails> WellArray =  new ArrayList<>(); 
         private static ArrayList<CasingDetails> CasingDetailsArray =  new ArrayList<>();
         private static ArrayList<Formation> FormationsArray =  new ArrayList<>();
@@ -61,6 +68,11 @@ public class HomePage extends javax.swing.JFrame {
         private static ArrayList<CompletionType> CompletionTypesArrayList =  new ArrayList<>();
         private static ArrayList<ProductionZoneDetails> productionZone = new ArrayList<>();
         private static ArrayList<Perforation> PerforationArray = new ArrayList<>();
+        
+         private static ArrayList<LinerDetails> LinerArray = new ArrayList<>();
+         private static ArrayList<PackerDetails> PackerArray = new ArrayList<>();
+          private static ArrayList<PlugDetails> PlugArray = new ArrayList<>();
+          
        String Remark = "";
 
       
@@ -250,11 +262,13 @@ public class HomePage extends javax.swing.JFrame {
 	  String total_depth = "";
 	  String spud_date = "";
 	  String completion_date = "";
+          String RecompletionDate= "";	
 	  String firstprodate = "";
 	  String drill_type = "";
 	  String drill_started = "";
-	  String drill_finished = "";		 	 
-	  int Casing_and_Cement_Line = 0;
+	  String drill_finished = "";	
+          String Amended = "";
+    	  int Casing_and_Cement_Line = 0;
           int Liner_line = 0;
 	  String OTCProductionUnitNo = "";
 	  Remark =""; 
@@ -334,6 +348,25 @@ public class HomePage extends javax.swing.JFrame {
 	        	   drill_finished =  CompletionDate.trim();
 	        	   
 	           }
+                    if( s.startsWith("Amend Reason:") ) 
+	           {
+                        String aAmend = s.replaceAll("Amend Reason:", ""); 
+                        Amended = aAmend.trim();	   
+	           }
+                   
+                   
+                   
+                    if( s.startsWith("Recomplete Date: ") ) 
+	           {
+	        	   System.out.println("***************** Recomplete Date:  *********");
+	        	 
+	        	   String reompletion_Date = s.replaceAll("Recomplete Date:", ""); 
+                            System.out.println("***************** Recomplete Date *********"+reompletion_Date);
+	        	   RecompletionDate =  reompletion_Date.trim();
+	        	   
+	           }
+                   
+                    
 	           if( s.startsWith("Drill Type:") ) 
 	           {
 	        	   System.out.println("***************** Drill Type: *********");
@@ -508,7 +541,7 @@ public class HomePage extends javax.swing.JFrame {
 	           i++;
 
 	            }
-             WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,well_type,datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,firstprodate,total_depth,drill_type,drill_started,drill_finished,PdfName));                   
+             WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,well_type,datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,RecompletionDate,firstprodate,total_depth,drill_type,drill_started,drill_finished,PdfName,Amended));                   
               productionZone.add(new ProductionZoneDetails(well_id, OTCProductionUnitNo));      
              reader.close();
             String GetTableExtract = GetTableExtract(aPDFfile, PdfName ,well_id);
@@ -537,6 +570,11 @@ public class HomePage extends javax.swing.JFrame {
         Sheet Completionsheet = workbook.createSheet("Completion");
         Sheet ProductionZoneSheet = workbook.createSheet("ProductionZone");
         Sheet FormationSheet = workbook.createSheet("Formation");
+        
+        Sheet LinerSheet = workbook.createSheet("Liner");
+        Sheet PackerSheet = workbook.createSheet("Packer");
+        Sheet PlugSheet = workbook.createSheet("Plug");
+
         Sheet InitialPotentialSheet = workbook.createSheet("Initial Potential");
         Sheet PerforationSheet = workbook.createSheet("Perforation");
 
@@ -610,18 +648,23 @@ public class HomePage extends javax.swing.JFrame {
             .setCellValue(well.getSpud_Date());
             row.createCell(11)
             .setCellValue(well.getCompletion_Date());
-            row.createCell(12)
-            .setCellValue(well.getFirstProDate());
+             row.createCell(12)
+            .setCellValue(well.getReCompletion_Date());
             row.createCell(13)
-            .setCellValue(well.getTotal_Depth());
+            .setCellValue(well.getFirstProDate());
             row.createCell(14)
-            .setCellValue(well.getDrill_Type());
+            .setCellValue(well.getTotal_Depth());
             row.createCell(15)
-            .setCellValue(well.getDrill_Started());
+            .setCellValue(well.getDrill_Type());
             row.createCell(16)
+            .setCellValue(well.getDrill_Started());
+            row.createCell(17)
             .setCellValue(well.getDrill_Finished());
-            row.createCell(17)	
+            row.createCell(18)	
             .setCellValue(well.getPDFname());
+             row.createCell(19)	
+            .setCellValue(well.getAmended());
+            
             
         }
         
@@ -784,10 +827,103 @@ public class HomePage extends javax.swing.JFrame {
                     .setCellValue(aPerforation.getPDFName());          
 
          }
+       
+         // ******************************** Liner Details **********************************
+       
+         Row LinerSheetHeader = LinerSheet.createRow(0);
+        
+        for(int i = 0; i < LinerColumns.length; i++) {
+            Cell cell = LinerSheetHeader.createCell(i);
+            cell.setCellValue(LinerColumns[i]);
+            cell.setCellStyle(headerCellStyle);
+        }
+       int LinerRow = 1 ;
+       for(LinerDetails aLinerDetails :LinerArray)
+         {
+             Row row = LinerSheet.createRow(LinerRow++);
+              row.createCell(0)
+                    .setCellValue(aLinerDetails.getLinerWell_Number());
+             row.createCell(1)
+                    .setCellValue(aLinerDetails.getLinerType());
+             row.createCell(2)
+                    .setCellValue(aLinerDetails.getLinerSize());
+              row.createCell(3)
+                    .setCellValue(aLinerDetails.getLinerWeight());
+              row.createCell(4)
+                    .setCellValue(aLinerDetails.getLinerGrade());
+              row.createCell(5)
+                    .setCellValue(aLinerDetails.getLinerLength());
+             row.createCell(6)
+                    .setCellValue(aLinerDetails.getLinerPSI());
+              row.createCell(7)
+                    .setCellValue(aLinerDetails.getLinerSAX());   
+               row.createCell(8)
+                    .setCellValue(aLinerDetails.getLinerTopDepth()); 
+                row.createCell(9)
+                    .setCellValue(aLinerDetails.getLinerBottomDepth()); 
+                 row.createCell(10)
+                    .setCellValue(aLinerDetails.getPdfName()); 
+
+         }
       
       // ******************************************************************
-
       
+      
+    // ******************************** Packer Details **********************************
+      
+         Row PackerSheetHeader = PackerSheet.createRow(0);
+        
+        for(int i = 0; i < PackerColumns.length; i++) {
+            Cell cell = PackerSheetHeader.createCell(i);
+            cell.setCellValue(PackerColumns[i]);
+            cell.setCellStyle(headerCellStyle);
+        }
+        
+        int PackerRow = 1 ;
+         for(PackerDetails aPackerDetails :PackerArray)
+         {
+             Row row = PackerSheet.createRow(PackerRow++);
+             row.createCell(0)
+                    .setCellValue(aPackerDetails.getWell_id());
+             row.createCell(1)
+                    .setCellValue(aPackerDetails.getPackerDepth());
+              row.createCell(2)
+                    .setCellValue(aPackerDetails.getPackerBrandType());
+              row.createCell(3)
+                    .setCellValue(aPackerDetails.getPdfName());
+         }
+    
+    
+    
+          // ******************************************************************
+
+        // ******************************** Plug Details **********************************
+      
+        Row PlugSheetHeader = PlugSheet.createRow(0);
+        
+        for(int i = 0; i < PlugColumns.length; i++) {
+            Cell cell = PlugSheetHeader.createCell(i);
+            cell.setCellValue(PlugColumns[i]);
+            cell.setCellStyle(headerCellStyle);
+        }
+        
+        int PlugSheetHeaderRow = 1 ;
+         for(PlugDetails aPlugDetails :PlugArray)
+         {
+             Row row = PlugSheet.createRow(PlugSheetHeaderRow++);
+             row.createCell(0)
+                    .setCellValue(aPlugDetails.getWell_id());
+             row.createCell(1)
+                    .setCellValue(aPlugDetails.getPlugDepth());
+              row.createCell(2)
+                    .setCellValue(aPlugDetails.getPlugType());
+              row.createCell(3)
+                    .setCellValue(aPlugDetails.getPdfName());
+         }
+          // ******************************************************************
+      
+          
+          
          String currentDate = null;
         String fileName = "WellDetailsNew";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");           
@@ -809,7 +945,9 @@ public class HomePage extends javax.swing.JFrame {
                InitialPotentialArray.clear();
                CompletionTypesArrayList.clear();
                productionZone.clear();
-
+               LinerArray.clear();
+               PackerArray.clear();
+               PlugArray.clear();
                 
                 
                 JOptionPane.showMessageDialog(null, "Completed");
@@ -825,6 +963,9 @@ public class HomePage extends javax.swing.JFrame {
 
             PDDocument pd = PDDocument.load(new File(aPDFfile));
             boolean Start_read = false  ;
+           boolean Start_read_Liner = false ;
+           boolean Start_read_Packer = false ;
+           boolean Start_read_Plug = false ;
             int totalPages = pd.getNumberOfPages();
             System.out.println("Total Pages in Document: " + totalPages);
             if (totalPages > 1) {
@@ -853,7 +994,29 @@ public class HomePage extends javax.swing.JFrame {
                         }
                         if(cells.get(0).getText().equals("Liner"))
                         {
-                            Start_read =false ;
+                             Start_read = false ;
+                             Start_read_Liner =true ;
+                        }
+                        if(cells.get(0).getText().equals("Packer"))
+                        {
+                             Start_read_Liner =false ;
+                             
+                             Start_read_Packer = true ;
+                              
+                        }
+                        
+                         if(cells.get(0).getText().equals("Plug"))
+                        {
+                            Start_read_Packer = false ;
+                             Start_read_Plug = true ;
+                        }
+                        
+                        
+                        
+                        if(cells.get(0).getText().equals("Initial Test Data"))
+                        {
+                            
+                              Start_read_Plug = false ;
                         }
                         
                         if(Start_read)
@@ -888,6 +1051,80 @@ public class HomePage extends javax.swing.JFrame {
                         }
                         
                         
+                        }
+                        
+                        if(Start_read_Liner)
+                        {
+                             String LinerWell_Number="";
+                             String LinerType="@";
+                             String LinerSize="";
+                             String LinerWeight="";
+                             String LinerGrade="";
+                             String LinerLength="";
+                             String LinerPSI="";
+                             String LinerSAX="";
+                             String LinerTopDepth="";
+                             String LinerBottomDepth="";
+                            if(cells.size()>8);
+                            {
+                            if(!cells.get(0).getText().equals("Type") && !cells.get(0).getText().equals("Liner") &&!cells.get(0).getText().equals(" ") )
+                            {
+                               // System.out.print(cells.get(j).getText() + "|");
+                              LinerType    =     cells.get(0).getText();
+                              LinerSize    =     cells.get(1).getText();
+                              LinerWeight  =     cells.get(2).getText();
+                              LinerGrade   =     cells.get(3).getText();
+                              LinerLength  =     cells.get(4).getText();
+                              LinerPSI     =     cells.get(5).getText();
+                              LinerSAX     =     cells.get(6).getText();
+                              LinerTopDepth=     cells.get(7).getText();  
+                              LinerBottomDepth=     cells.get(8).getText();
+                            }
+                            
+                            if(!LinerType.equals("@"))
+                            LinerArray.add(new LinerDetails(well_id,LinerType,LinerSize,LinerWeight,LinerGrade,LinerLength,LinerPSI,LinerSAX,LinerTopDepth,LinerBottomDepth,PdfName));
+                            
+                         
+                            }
+                             
+                        }
+                        
+                        if(Start_read_Packer)
+                        {
+                            String PackerWell_Number="";
+                             String PackerDepth="@";
+                             String PackerBrandType="";
+                             
+                        if(cells.size()>1);
+                        {
+                             if(!cells.get(0).getText().equals("Depth") && !cells.get(0).getText().equals("Packer") &&!cells.get(0).getText().equals(" ") )
+                            {
+                              PackerDepth    =     cells.get(0).getText();
+                              PackerBrandType    =     cells.get(1).getText();
+
+                            }
+                              if(!PackerDepth.equals("@"))
+                            PackerArray.add(new PackerDetails(well_id,PackerDepth,PackerBrandType,PdfName));  
+                         }
+                             
+                        }
+                         if(Start_read_Plug)
+                        {
+                             String PlugWell_Number="";
+                             String PlugDepth="@";
+                             String PlugType="";
+                             if(cells.size()>1);
+                        {
+                             if(!cells.get(0).getText().equals("Plug") && !cells.get(0).getText().equals("Depth") &&!cells.get(0).getText().equals(" ") )
+                            {
+                              PlugDepth    =     cells.get(0).getText();
+                              PlugType    =     cells.get(1).getText();
+
+                            }
+                             
+                              if(!PlugDepth.equals("@"))
+                            PlugArray.add(new PlugDetails(well_id,PlugDepth,PlugType,PdfName));  
+                         }
                         }
                     }
                 }

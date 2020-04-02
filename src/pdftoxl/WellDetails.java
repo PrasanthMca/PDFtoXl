@@ -98,6 +98,13 @@ public class WellDetails {
 	public void setCompletion_Date(String completion_Date) {
 		Completion_Date = completion_Date;
 	}
+        public String getReCompletion_Date() {
+		return ReCompletion_Date;
+	}
+
+	public void setReCompletion_Date(String aRecompletion_Date) {
+		ReCompletion_Date = aRecompletion_Date;
+	}
 
 	public String getFirstProDate() {
 		return FirstProDate;
@@ -167,16 +174,26 @@ public class WellDetails {
 	 private String Total_Depth;
 	 private String Spud_Date;
 	 private String Completion_Date;
+         private String ReCompletion_Date;
 	 private String FirstProDate;
 	 private String Drill_Type;
 	 private String Drill_Started;
 	 private String Drill_Finished;
          private String PDFName;
+         private String Amended;
+
+    public String getAmended() {
+        return Amended;
+    }
+
+    public void setAmended(String Amended) {
+        this.Amended = Amended;
+    }
 	
 	 public WellDetails(String well_id2, String operator_name2, String operator_number2, String well_name2,
 			String well_number2, String status2,String classname, String datum_elevation2, String ground_elevation2,
-			String plugback_depth2, String spud_date2, String completion_date2, String firstprodate2,
-			String total_depth2, String drill_type2, String drill_started2, String drill_finished2,String aPDFname) {
+			String plugback_depth2, String spud_date2, String completion_date2,String recompletion_date2, String firstprodate2,
+			String total_depth2, String drill_type2, String drill_started2, String drill_finished2,String aPDFname,String aAmended) {
 		 
 		 this.Well_ID = well_id2;
 		 this.Operator_Name = operator_name2;
@@ -195,7 +212,10 @@ public class WellDetails {
 		 this.Drill_Type = drill_type2;
 		 this.Drill_Started = drill_started2;
 		 this.Drill_Finished = drill_finished2;
+                 this.ReCompletion_Date = recompletion_date2;
+             
                  this.PDFName = aPDFname;
+                 this.Amended = aAmended;
 		 
 		 
 	
