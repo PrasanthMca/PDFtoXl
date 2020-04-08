@@ -25,20 +25,53 @@ public class Perforation {
         this.PDFName = PDFName;
     }
 
-    Perforation(String awell_id, String aFrom, String aTo, String aOrderNo, String aFractureTreatments, String aAcidVolumes, String aPdfName) {
+    Perforation(String awell_id,String aFormationName,String aCode,String aClass, String aFrom, String aTo, String aOrderNo, String aUnitSize, String aFractureTreatments, String aAcidVolumes, String aPdfName) {
 
-         this.Well_ID = awell_id;
-           this.From =aFrom;
-	   this.To =aTo;
-	   this.OrderNo = aOrderNo;
-	   this.FractureTreatments =aFractureTreatments;
-           this.AcidVolumes = aAcidVolumes;
-           this.PDFName = aPdfName;
+        this.Well_ID = awell_id;
+        this.From = aFrom;
+        this.To = aTo;
+        this.OrderNo = aOrderNo;
+        this.UnitSize = aUnitSize;
+        this.FractureTreatments = aFractureTreatments;
+        this.AcidVolumes = aAcidVolumes;
+        this.PDFName = aPdfName;
+        this.FormationName = aFormationName;
+        this.Code = aCode;
+        this.Class=aClass;
 
     }
+    
+    
 
- 
+    /**
+     * @param Well_ID the Well_ID to set
+     */
+    public void setWellType(String Class) {
+        this.Class = Class;
+    }
+     public String getWellType() {
+        return Class;
+    }
+     public String getCode() {
+        return Code;
+    }
 
+    /**
+     * @param Well_ID the Well_ID to set
+     */
+    public void setCode(String Code) {
+        this.Code = Code;
+    }
+ public String getFormationName() {
+        return FormationName;
+    }
+
+    /**
+     * @param Well_ID the Well_ID to set
+     */
+    public void setFormationName(String Formation_Name) {
+        this.FormationName = Formation_Name;
+    }
     /**
      * @return the Well_ID
      */
@@ -112,6 +145,17 @@ public class Perforation {
     /**
      * @return the AcidVolumes
      */
+    public String getUnitSize() {
+        return UnitSize;
+    }
+
+    /**
+     * @param To the To to set
+     */
+    public void setUnitSize(String Unit_Size) {
+        this.UnitSize = Unit_Size;
+    }
+
     public String getAcidVolumes() {
         return AcidVolumes;
     }
@@ -122,15 +166,17 @@ public class Perforation {
     public void setAcidVolumes(String AcidVolumes) {
         this.AcidVolumes = AcidVolumes;
     }
-    
-         private String Well_ID;
-         private String From;
-	 private String To;
-	 private String OrderNo;
-	 private String FractureTreatments;
-         private String AcidVolumes;
-         private String PDFName;
-	
-    
-    
+
+    private String Well_ID;
+    private String From;
+    private String To;
+    private String OrderNo;
+    private String FractureTreatments;
+    private String AcidVolumes;
+    private String PDFName;
+    private String UnitSize;
+    private String FormationName;
+    private String Code;
+      private String Class;
+
 }

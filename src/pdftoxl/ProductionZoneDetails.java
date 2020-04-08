@@ -11,12 +11,14 @@ package pdftoxl;
  */
 public class ProductionZoneDetails {
     
-    public ProductionZoneDetails(String Wellid, String OTCProductioNo )
+   public ProductionZoneDetails(String Wellid, String OTCProductioNo,String aFormationName )
     {
         this.Well_ID = Wellid;
         this.OTCProductionUnitNo = OTCProductioNo;
+           this.FormationName = aFormationName;
     }
     String Well_ID;
+     private String FormationName;
     private String OTCProductionUnitNo;
     
         public String getWell_ID() {
@@ -34,6 +36,15 @@ public class ProductionZoneDetails {
 		this.OTCProductionUnitNo= OTCProductionUnitNo;
 	}
 
+        
+        public String getFormationName() {
+        return FormationName;
+    }
+
+    
+    public void setFormationName(String Formation_Name) {
+        this.FormationName = Formation_Name;
+    }
     
     
     
