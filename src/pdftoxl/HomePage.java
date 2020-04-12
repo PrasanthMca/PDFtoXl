@@ -1260,17 +1260,22 @@ public class HomePage extends javax.swing.JFrame {
                     }
                 }
             
-       //   -------- -------- -------- --------  Read Perforation --------
+  
+                //   -------- -------- -------- --------  Read Perforation --------
                 boolean Start_perforationInt = false;
                 boolean StartReadAcidval = false;
 
-                String OrderNo = "@";
-                String UnitSize = "@";
+                String OrderNo = "";
+                String UnitSize = "";
                 String From = "";
                 String To = "";
                 String FractureTreatments = "";
                 String AcidVolumes = "";
-
+                String Formation = "";
+                String refCode = "";
+                String ClassName = "";
+                String PrerefCode = "";
+                int count=0;
                 BasicExtractionAlgorithm bea = new BasicExtractionAlgorithm();
 
                 List<Table> SecondPagetablesForPerforation = bea.extract(PageTwo);
@@ -1280,29 +1285,27 @@ public class HomePage extends javax.swing.JFrame {
                     for (int i = 0; i < rows.size(); i++) {
 
                         List<RectangularTextContainer> cells = rows.get(i);
+
                         for (int y = 0; y < cells.size(); y++) {
-                            System.out.print(i + "   cells " + cells.get(y).getText() + " " + y + " \n");
+                            System.out.print(i + "   Rows  \n " + cells.get(y).getText() + "  cell " + y + " \n");
                         }
+
                         if (cells.get(0).getText().equals("Order No") || cells.get(0).getText().equals("Order No Unit Size")) {
                             Start_perforationInt = true;
+                            StartReadAcidval = false;
+
+                        }
+                        if (cells.get(0).getText().equals("Spacing Orders") || cells.get(0).getText().startsWith("Formation Name")) {
+                            Start_perforationInt = false;
+                            StartReadAcidval = false;
+
+                        }
+                        if (cells.get(0).getText().equals("Acid Volumes") || cells.get(1).getText().equals("Acid Volumes")) {
+                            Start_perforationInt = false;
+                            StartReadAcidval = true;
                         }
 
-                        if (cells.get(0).getText().startsWith("Acid Volumes")  || cells.get(1).getText().startsWith("Acid Volumes")) {
-                            //System.out.print("Acid Volumes\n");
-                            Start_perforationInt = false;
-                            StartReadAcidval = true;
-                        }
-                        if (cells.get(0).getText().startsWith("Fracture")) {
-                            // System.out.print("Fracture Treatments \n");
-                            Start_perforationInt = false;
-                            StartReadAcidval = true;
-                        }
-
-                        if (cells.get(0).getText().startsWith("Formation Name:")) {
-                            StartReadAcidval = true;
-                            Start_perforationInt = false;
-                        }
-                        if (cells.get(0).getText().startsWith("Formation")) {
+                         if (cells.get(0).getText().startsWith("Formation")) {
                             StartReadAcidval = false;
                             Start_perforationInt = false;
                         }
@@ -1346,7 +1349,7 @@ public class HomePage extends javax.swing.JFrame {
                             StartReadAcidval = false;
                             Start_perforationInt = false;
                         }
-
+                        
                         if (Start_perforationInt) {
                             if ((!cells.get(0).getText().startsWith("Order No")) && (!cells.get(0).getText().startsWith("Acid Volumes")) && !cells.get(0).getText().equals(" ")) {
                                 if (cells.size() > 5) {
@@ -1359,55 +1362,128 @@ public class HomePage extends javax.swing.JFrame {
 
                                     } else {
                                         String tempORdernum[] = cells.get(0).getText().trim().split(" ");
-                                        
+
                                         int size2 = tempORdernum.length;
-                                        System.out.print("size2"+size2);
-                                        if ((size2 != 0) && (size2 == 2)) {
+                                        //  System.out.print("size2"+size2);
+                                        if ((size2 >0) && (size2 == 2)) {
                                             OrderNo = tempORdernum[0];
                                             UnitSize = tempORdernum[1];
                                         } else {
-                                            String ORdernum = cells.get(0).getText().trim();
-                                            String[] getOrderNumberOnly = ORdernum.split(" ");
-                                            OrderNo = getOrderNumberOnly[0];
-                                            String OUnitSize = cells.get(2).getText();
-                                            String[] getUnitSizeOnly = OUnitSize.split(" ");
-                                            UnitSize = getUnitSizeOnly[0];
+                                            
+                                            OrderNo = cells.get(0).getText().trim();
+                                           
+                                            
+                                            UnitSize = cells.get(1).getText().trim();
+                                            
 
                                         }
+                                        /*System.out.print(" from_to "+cells.get(3).getText().trim()+"\n");
+                                         System.out.print(" from_to "+cells.get(5).getText().trim()+"\n");*/
 
                                         String tempFrom[] = cells.get(4).getText().trim().split(" ");
 
                                         int size = tempFrom.length;
-                                        System.out.print("size"+size);
-                                        if ((size != 0) && (size == 2)) {
+                                        // System.out.print("size"+size);
+                                        if ((size > 0) && (size == 2)) {
                                             From = tempFrom[0].toString();
                                             To = tempFrom[1].toString();
                                         } else {
-                                            From = cells.get(4).getText();
+                                            From = cells.get(3).getText();
                                             To = cells.get(5).getText();
                                         }
+                                        
+                                         System.out.print("OrderNo    "+OrderNo);
+   System.out.print("UnitSize    "+UnitSize);
+    System.out.print("From    "+From);
+   System.out.print("To    "+To);
                                     }
 
                                 }
                             }
                         }
-                           System.out.print("StartReadAcidval    "+StartReadAcidval+"\n");
-                        if (StartReadAcidval) {
+
+                       
+
+                        if (cells.get(0).getText().startsWith("Formation Name:")) {
+
+                            if (cells.get(0).getText().startsWith("Formation Name:")) {
+                                String FormationName = cells.get(0).getText();
+                                String Code = cells.get(3).getText();
+                                String Class = cells.get(5).getText();
+
+                                String[] splited = FormationName.split("Formation Name:");
+                                if (splited.length > 1) {
+                                    if (!splited[1].trim().equalsIgnoreCase("")) {
+                                        Formation = splited[1].trim();
+                                    }
+                                } else {
+                                    Formation = "";
+                                }
+
+                                String[] splited1 = Code.split("Code:");
+                                if (splited1.length > 1) {
+                                    if (!splited1[1].trim().equalsIgnoreCase("")) {
+                                        refCode = splited1[1].trim();
+                                    }
+                                } else {
+                                    refCode = "";
+                                }
+                                String[] splited2 = Class.split("Class:");
+                                if (splited2.length > 1) {
+                                    if (!splited2[1].trim().equalsIgnoreCase("")) {
+                                        ClassName = splited2[1].trim();
+                                    }
+                                } else {
+                                    ClassName = "";
+                                }
+
+                                if (refCode.equalsIgnoreCase("") && ClassName.equalsIgnoreCase("")) {
+                                    String s = cells.get(4).getText();
+                                    int index2 = s.indexOf("Code:");
+                                    int index3 = s.indexOf("Class:");
+
+                                    String tempFName = s.substring(index2, index3);
+                                    String tempCode = s.substring(index3);
+                                    splited1 = tempFName.split("Code:");
+                                    if (splited1.length > 1) {
+                                        if (!splited1[1].trim().equalsIgnoreCase("")) {
+                                            refCode = splited1[1].trim();
+                                        }
+                                    }
+                                    splited2 = tempCode.split("Class:");
+                                    if (splited2.length > 1) {
+                                        if (!splited2[1].trim().equalsIgnoreCase("")) {
+                                            ClassName = splited2[1].trim();
+                                        }
+                                    }
+                                }
+  System.out.print("ClassName    "+ClassName);
+   System.out.print("refCode    "+refCode);
+                           }
+                          }
+                        
+                         if (StartReadAcidval) {
                             if ((!cells.get(0).getText().startsWith("Acid Volumes")) && (!cells.get(0).getText().startsWith("Fracture Treatments"))) {
                                 if (cells.size() > 3) {
 
                                     AcidVolumes = cells.get(0).getText();
                                     FractureTreatments = cells.get(3).getText();
+                                      System.out.print("AcidVolumes    "+AcidVolumes);
+   System.out.print("FractureTreatments    "+FractureTreatments);
                                 }
                             }
+                        
+   System.out.print("OrderNo  ----   "+OrderNo);
+                       if(StartReadAcidval) {
+   System.out.print("check query"+!AcidVolumes.equals("") +"  "+ !OrderNo.equals("") +" "+ !PrerefCode.equalsIgnoreCase(refCode));
+                        if(!AcidVolumes.equals("") && !OrderNo.equals("") && !PrerefCode.equalsIgnoreCase(refCode)){
+                                     PrerefCode=refCode;
+                                     System.out.println(" insert call "+(++count));
+                            PerforationArray.add(new Perforation(well_id, Formation, refCode, ClassName, From, To, OrderNo, UnitSize, FractureTreatments, AcidVolumes, PdfName));
+
                         }
-   System.out.print("AcidVolumes    "+AcidVolumes);
-   System.out.print("FractureTreatments    "+FractureTreatments);
-                        if ((StartReadAcidval == true) || (Start_perforationInt == true)) {
-                            if (!OrderNo.equals("@") &&  !AcidVolumes.equals("") && !FractureTreatments.equals("")) {
-                                PerforationArray.add(new Perforation(well_id, Formation_Name, Code,well_type, From, To, OrderNo, UnitSize, FractureTreatments, AcidVolumes, PdfName));
-                            }
                         }
+                         }
                         System.out.print("");
                     }
 
