@@ -970,6 +970,7 @@ public class HomePage extends javax.swing.JFrame {
                CompletionTypesArrayList.clear();
                productionZone.clear();
                LinerArray.clear();
+               PerforationArray.clear();
                PackerArray.clear();
                PlugArray.clear();
                 
@@ -1403,13 +1404,25 @@ public class HomePage extends javax.swing.JFrame {
                         }
 
                        
-
+                        String Code = "";
+                                String Class = "";
                         if (cells.get(0).getText().startsWith("Formation Name:")) {
 
                             if (cells.get(0).getText().startsWith("Formation Name:")) {
                                 String FormationName = cells.get(0).getText();
-                                String Code = cells.get(3).getText();
-                                String Class = cells.get(5).getText();
+                                for(int in = 1 ; in<cells.size();in++)
+                                {
+                                    if(cells.get(in).getText().startsWith("Code:"))
+                                    {
+                                          Code = cells.get(in).getText();
+                                         
+                                    }
+                                         
+                                    
+                                    if(cells.get(in).getText().startsWith("Class:"))
+                                       Class = cells.get(in).getText();
+                                }
+                        
 
                                 String[] splited = FormationName.split("Formation Name:");
                                 if (splited.length > 1) {
@@ -1479,8 +1492,26 @@ public class HomePage extends javax.swing.JFrame {
                         if(!AcidVolumes.equals("") && !OrderNo.equals("") && !PrerefCode.equalsIgnoreCase(refCode)){
                                      PrerefCode=refCode;
                                      System.out.println(" insert call "+(++count));
+                                     if(ClassName.equals("") && refCode.contains("Class:"))
+                                     {
+                                         String[] temp = refCode.split("Class:");
+                                         refCode = temp[0].trim();
+                                         ClassName = temp[1].trim();
+                                         
+                                     }
+                                     
+                                     if(To.equals("")&&(!From.equals("")))
+                                     {
+                                         From.trim();
+                                           String[] tempData  =  From.split(" ");
+                                           From = tempData[0];
+                                           To =  tempData[1];
+                                     }
                             PerforationArray.add(new Perforation(well_id, Formation, refCode, ClassName, From, To, OrderNo, UnitSize, FractureTreatments, AcidVolumes, PdfName));
-
+                                ClassName ="";
+                                From ="";
+                                To ="";
+                      
                         }
                         }
                          }
