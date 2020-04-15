@@ -1384,9 +1384,10 @@ public class HomePage extends javax.swing.JFrame {
                                             
 
                                         }
-                                        /*System.out.print(" from_to "+cells.get(3).getText().trim()+"\n");
-                                         System.out.print(" from_to "+cells.get(5).getText().trim()+"\n");*/
-
+//                                         System.out.print(" from_to "+cells.get(1).getText().trim()+"\n");
+//                                        System.out.print(" from_to "+cells.get(2).getText().trim()+"\n");
+//                                         System.out.print(" from_to "+cells.get(5).getText().trim()+"\n");
+               
                                         String tempFrom[] = cells.get(4).getText().trim().split(" ");
 
                                         int size = tempFrom.length;
@@ -1397,6 +1398,17 @@ public class HomePage extends javax.swing.JFrame {
                                         } else {
                                             From = cells.get(3).getText();
                                             To = cells.get(5).getText();
+                                            
+                                            if(From.equals("")&&To.equals(""))
+                                            {
+                                                if(!cells.get(1).equals(""))
+                                                {
+                                                    From = cells.get(1).getText();
+                                                     To = cells.get(4).getText();
+                                                }
+                                            }
+                                         
+                                                 
                                         }
                                         
                                          System.out.print("OrderNo    "+OrderNo);
