@@ -569,6 +569,12 @@ public class HomePage extends javax.swing.JFrame {
 	        {
 	        	 ex.printStackTrace();
 	        }
+                  catch(Exception ex)
+                {
+                    // ex.printStackTrace();
+                     System.out.println("Exception in PDTtoTextContent method"+ex);
+                     
+                }
 	    }
     
     public static void WellHeaderSheet()
@@ -1500,7 +1506,7 @@ public class HomePage extends javax.swing.JFrame {
                                          
                                      }
                                      
-                                     if(To.equals("")&&(!From.equals("")))
+                                     if(To.equals("")&&(!From.equals("")&&(From.contains(" "))))
                                      {
                                          From.trim();
                                            String[] tempData  =  From.split(" ");
