@@ -332,7 +332,7 @@ public class HomePage extends javax.swing.JFrame {
 	        	   completion_date = splited[1].trim();
 	        	   }catch(ArrayIndexOutOfBoundsException ex)
 	        	   {
-	        		   
+	        		   System.out.println("**ArrayIndexOutOfBoundsException:");
 	        	   }
 	        	   
 	           }
@@ -563,16 +563,19 @@ public class HomePage extends javax.swing.JFrame {
             String GetTableExtract = GetTableExtract(aPDFfile, PdfName ,well_id);
 	        } 
                 catch (IOException e) {
-	            e.printStackTrace();
+	          //  e.printStackTrace();
+                      System.out.println("(IOException in PDTtoTextContent method "+aPDFfile+ "-- File"+e);
 	        }
 	        catch (ArrayIndexOutOfBoundsException ex)
 	        {
-	        	 ex.printStackTrace();
+	        	 //ex.printStackTrace();
+                          System.out.println("(ArrayIndexOutOfBoundsException in PDTtoTextContent method "+aPDFfile+ "-- File"+ex);
 	        }
                   catch(Exception ex)
                 {
                     // ex.printStackTrace();
-                     System.out.println("Exception in PDTtoTextContent method"+ex);
+                      System.out.println("Exception in PDTtoTextContent method "+aPDFfile+ "-- File"+ex);
+                  
                      
                 }
 	    }
@@ -984,8 +987,14 @@ public class HomePage extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Completed");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}      
+			//e.printStackTrace();
+                         System.out.println("IOException while adding Xl file "+e);
+		}  
+           catch (Exception ex) {
+			// TODO Auto-generated catch block
+			//ex.printStackTrace(); 
+                        System.out.println("Exception while adding Xl file "+ex);
+		}    
 	}
     
      public  String GetTableExtract(String aPDFfile, String PdfName, String well_id) {
@@ -1293,9 +1302,9 @@ public class HomePage extends javax.swing.JFrame {
 
                         List<RectangularTextContainer> cells = rows.get(i);
 
-                        for (int y = 0; y < cells.size(); y++) {
-                            System.out.print(i + "   Rows  \n " + cells.get(y).getText() + "  cell " + y + " \n");
-                        }
+//                        for (int y = 0; y < cells.size(); y++) {
+//                            System.out.print(i + "   Rows  \n " + cells.get(y).getText() + "  cell " + y + " \n");
+//                        }
 
                         if (cells.get(0).getText().equals("Order No") || cells.get(0).getText().equals("Order No Unit Size")) {
                             Start_perforationInt = true;
@@ -1540,10 +1549,11 @@ public class HomePage extends javax.swing.JFrame {
 
             }
         } catch (IOException ex) {
-            Logger.getLogger(PdfTableExtract.class.getName()).log(Level.SEVERE, null, ex);
+           // Logger.getLogger(PdfTableExtract.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("IOException in "+aPDFfile+ "-- File"+ex);
         }
         catch (Exception ex) {
-           System.out.println(""+ex);
+           System.out.println("Exception in "+aPDFfile+ "-- File"+ex);
         }
         return "";
     }
