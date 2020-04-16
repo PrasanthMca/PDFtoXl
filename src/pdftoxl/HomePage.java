@@ -1542,6 +1542,9 @@ public class HomePage extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(PdfTableExtract.class.getName()).log(Level.SEVERE, null, ex);
         }
+        catch (Exception ex) {
+           System.out.println(""+ex);
+        }
         return "";
     }
 
