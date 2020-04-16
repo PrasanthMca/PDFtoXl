@@ -306,7 +306,11 @@ public class HomePage extends javax.swing.JFrame {
 	        	   String[] splited = s.split(" ");	        	   
 	        	   well_id = splited[2].trim();
 	        	   String[] Spud_Date =APINo.split("Spud Date:");
-	        	   spud_date = Spud_Date[1].trim();	
+                           if(Spud_Date.length>1 ){
+	        	   spud_date = Spud_Date[1].trim();	}
+                           else{
+                               spud_date ="";
+                           }
                                                   
 	           }
 	           if( s.startsWith("OTC Prod.") ) 
@@ -404,7 +408,7 @@ public class HomePage extends javax.swing.JFrame {
                        }catch(ArrayIndexOutOfBoundsException ex)
 	        	   {
 	        		 System.out.println("Error in First Sales Date");  
-                                 ex.printStackTrace();
+                               //  ex.printStackTrace();
 	        	   }
 	        	   
 	           }
@@ -540,7 +544,13 @@ public class HomePage extends javax.swing.JFrame {
                     String[] splited1 = tempCode.split("Code:");
                     Code = splited1[1].trim();
                     String[] splited2 = tempClass.split("Class:");
-                    well_type = splited2[1].trim();
+                    if(splited2.length>0){
+                    well_type = splited2[1].trim();}
+                    else{
+                        well_type ="";
+                    }
+                    
+                    
                            
 
                           }
@@ -568,7 +578,7 @@ public class HomePage extends javax.swing.JFrame {
 	        }
 	        catch (ArrayIndexOutOfBoundsException ex)
 	        {
-	        	 //ex.printStackTrace();
+	        	// ex.printStackTrace();
                           System.out.println("(ArrayIndexOutOfBoundsException in PDTtoTextContent method "+aPDFfile+ "-- File"+ex);
 	        }
                   catch(Exception ex)
@@ -1304,6 +1314,7 @@ public class HomePage extends javax.swing.JFrame {
 
 //                        for (int y = 0; y < cells.size(); y++) {
 //                            System.out.print(i + "   Rows  \n " + cells.get(y).getText() + "  cell " + y + " \n");
+//                            
 //                        }
 
                         if (cells.get(0).getText().equals("Order No") || cells.get(0).getText().equals("Order No Unit Size")) {
@@ -1437,8 +1448,9 @@ public class HomePage extends javax.swing.JFrame {
 
                             if (cells.get(0).getText().startsWith("Formation Name:")) {
                                 String FormationName = cells.get(0).getText();
-                                for(int in = 1 ; in<cells.size();in++)
+                                for(int in = 0 ; in<cells.size();in++)
                                 {
+                                    System.out.println(cells.get(in).getText());
                                     if(cells.get(in).getText().startsWith("Code:"))
                                     {
                                           Code = cells.get(in).getText();
@@ -1455,6 +1467,15 @@ public class HomePage extends javax.swing.JFrame {
                                 if (splited.length > 1) {
                                     if (!splited[1].trim().equalsIgnoreCase("")) {
                                         Formation = splited[1].trim();
+                                        if(Formation.contains("Code:"))
+                                        {
+                                            String[] Formoverall = Formation.split("Code:");
+                                            Formation = Formoverall[0].trim();
+                                            Class = Formoverall[1].trim();
+                                            String[] Splicode = Class.split("Class:");
+                                            Code = "Code:"+Splicode[0].trim();
+                                            
+                                        }
                                     }
                                 } else {
                                     Formation = "";
@@ -1478,6 +1499,8 @@ public class HomePage extends javax.swing.JFrame {
                                 }
 
                                 if (refCode.equalsIgnoreCase("") && ClassName.equalsIgnoreCase("")) {
+                                 
+                                    String testerror = cells.get(1).getText();
                                     String s = cells.get(4).getText();
                                     int index2 = s.indexOf("Code:");
                                     int index3 = s.indexOf("Class:");
@@ -1554,6 +1577,7 @@ public class HomePage extends javax.swing.JFrame {
         }
         catch (Exception ex) {
            System.out.println("Exception in "+aPDFfile+ "-- File"+ex);
+        //   ex.printStackTrace();
         }
         return "";
     }
