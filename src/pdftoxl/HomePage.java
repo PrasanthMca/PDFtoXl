@@ -211,7 +211,7 @@ public class HomePage extends javax.swing.JFrame {
             int result = fileChooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+           //  System.out.println("Selected file: " + selectedFile.getAbsolutePath());
              PDF_PATH = selectedFile.getAbsolutePath();
               jLabel1.setText("PDF Location :"+PDF_PATH);
                 //JOptionPane.showMessageDialog(rootPane, result);
@@ -234,7 +234,7 @@ public class HomePage extends javax.swing.JFrame {
                if (f.isFile() && f.getName().endsWith(".pdf")) 
                {
             
-                System.out.println("==================================PDF Name "+f.getName()+"==============================");
+               /// System.out.println("==================================PDF Name "+f.getName()+"==============================");
                   PDTtoTextContent(PDF_PATH+"/"+f.getName(),f.getName());
                   
                     PDFCount++;
@@ -302,7 +302,7 @@ public class HomePage extends javax.swing.JFrame {
 	           if( s.startsWith("API No.:") ) 
 	           {
 	        	   String APINo = s;
-	        	   System.out.println("***************** API No *********");
+	        	  // System.out.println("***************** API No *********");
 	        	   String[] splited = s.split(" ");	        	   
 	        	   well_id = splited[2].trim();
 	        	   String[] Spud_Date =APINo.split("Spud Date:");
@@ -318,7 +318,7 @@ public class HomePage extends javax.swing.JFrame {
                        String LAST = "";
                        int count =0;
 	        	   try {
-	        	   System.out.println("***************** Finished Date*********");
+	        	  // System.out.println("***************** Finished Date*********");
 	        	   String[] splited = s.split("Finished Date:");
                            if(count ==0)
                            {
@@ -336,13 +336,13 @@ public class HomePage extends javax.swing.JFrame {
 	        	   completion_date = splited[1].trim();
 	        	   }catch(ArrayIndexOutOfBoundsException ex)
 	        	   {
-	        		   System.out.println("**ArrayIndexOutOfBoundsException:");
+	        		   System.out.println("ArrayIndexOutOfBoundsException in OTC Prod:"+PdfName);
 	        	   }
 	        	   
 	           }
 	           if( s.startsWith("1st Prod Date:") ) 
 	           {
-	        	   System.out.println("***************** 1st Prod Date:  *********");
+	        	   //System.out.println("***************** 1st Prod Date:  *********");
 	        	 
 	        	   String FirstProdDate = s.replaceAll("1st Prod Date:", "");
 	        	  firstprodate = FirstProdDate.trim();
@@ -350,7 +350,7 @@ public class HomePage extends javax.swing.JFrame {
 	           }
 	           if( s.startsWith("Completion Date: ") ) 
 	           {
-	        	   System.out.println("***************** Completion Date:  *********");
+	        	  // System.out.println("***************** Completion Date:  *********");
 	        	 
 	        	   String CompletionDate = s.replaceAll("Completion Date: ", ""); 
 	        	   drill_finished =  CompletionDate.trim();
@@ -366,10 +366,10 @@ public class HomePage extends javax.swing.JFrame {
                    
                     if( s.startsWith("Recomplete Date: ") ) 
 	           {
-	        	   System.out.println("***************** Recomplete Date:  *********");
+	        	  // System.out.println("***************** Recomplete Date:  *********");
 	        	 
 	        	   String reompletion_Date = s.replaceAll("Recomplete Date:", ""); 
-                            System.out.println("***************** Recomplete Date *********"+reompletion_Date);
+                          //  System.out.println("***************** Recomplete Date *********"+reompletion_Date);
 	        	   RecompletionDate =  reompletion_Date.trim();
 	        	   
 	           }
@@ -377,7 +377,7 @@ public class HomePage extends javax.swing.JFrame {
                     
 	           if( s.startsWith("Drill Type:") ) 
 	           {
-	        	   System.out.println("***************** Drill Type: *********");
+	        	  // System.out.println("***************** Drill Type: *********");
 	        	 
 	        	   String DrillType = s.replaceAll("Drill Type:", "");
 	        	  drill_type = DrillType.trim();
@@ -386,7 +386,7 @@ public class HomePage extends javax.swing.JFrame {
 	           
 	           if( s.startsWith("Well Name:") ) 
 	           {
-	        	   System.out.println("***************** Well Name *********");
+	        	  // System.out.println("***************** Well Name *********");
 	        	   String WellData = s;
 	        	  String WellNameOnly =   WellData.replaceAll("Well Name:", " ");
 	        	   String[] splited = WellNameOnly.split("Purchaser/Measurer:");
@@ -398,7 +398,7 @@ public class HomePage extends javax.swing.JFrame {
 	           if( s.startsWith("Location:") ) 
 	           {
                        try{
-	        	   System.out.println("***************** Well Name *********");
+	        	 //  System.out.println("***************** Well Name *********");
 	        	   String FirstSalesDate = s;
                            if(FirstSalesDate.contains("First Sales Date:")){
 	        	   String[] splited = FirstSalesDate.split("First Sales Date:");
@@ -407,7 +407,7 @@ public class HomePage extends javax.swing.JFrame {
 	        	   
                        }catch(ArrayIndexOutOfBoundsException ex)
 	        	   {
-	        		 System.out.println("Error in First Sales Date");  
+	        		 System.out.println("Error in First Sales Date: "+PdfName);  
                                //  ex.printStackTrace();
 	        	   }
 	        	   
@@ -416,7 +416,7 @@ public class HomePage extends javax.swing.JFrame {
 	           
 	           if( s.startsWith("Derrick")) 
 	           {
-	        	   System.out.println("***************** Derrick *********");
+	        	  // System.out.println("***************** Derrick *********");
 	        	   String DerrickData = s;
 	        	 String WellNameOnly =   DerrickData.replaceAll("Derrick Elevation:", " ");
 	        	   String[] splited = WellNameOnly.split("Ground Elevation:");
@@ -428,12 +428,12 @@ public class HomePage extends javax.swing.JFrame {
 	           
 	           if( s.startsWith("Operator:") ) 
 	           {
-	        	   System.out.println("***************** Operatore *********");
+	        	 //  System.out.println("***************** Operatore *********");
 	        	   s.replaceAll("Operator:", " ");
 	        	   String[] part = s.split("(?<=\\D)(?=\\d)");
 	        	
 	        	   String[] OperatorName =  part[0].split("Operator:");
-	        	   System.out.println(OperatorName[1].trim());
+	        	  // System.out.println(OperatorName[1].trim());
 	        	   operator_name = OperatorName[1].trim();
 	        	   operator_number = part[1].trim();
 	           }
@@ -441,7 +441,7 @@ public class HomePage extends javax.swing.JFrame {
 	           
 	           if( s.startsWith("Total Depth:") ) 
 	           {
-	        	   System.out.println("***************** Total Depth: *********");
+	        	//   System.out.println("***************** Total Depth: *********");
 	        	   String DerrickData = s;
 	        	 String WellNameOnly =   DerrickData.replaceAll("Total Depth:", " ");	        
 	        	   total_depth = WellNameOnly.trim();
@@ -450,11 +450,11 @@ public class HomePage extends javax.swing.JFrame {
 	           if( s.startsWith("Depth Brand") ) 
 	           {
 	        	 
-	        	   System.out.println("***************** Depth Brand *********"+i);
+	        	 //  System.out.println("***************** Depth Brand *********"+i);
 	        	   String GetDepth = lines[i+1];
 	        	   String DepthVal = "NA";
 	        	   
-	        	   System.out.println("***************** Depth Brand *********"+GetDepth);
+	        	 //  System.out.println("***************** Depth Brand *********"+GetDepth);
 	        	   if(!GetDepth.contains("There are no Plug records to display.") )
 	        	   {
 	        		   if(!GetDepth.contains("There are no Packer records to display.") )
@@ -497,7 +497,7 @@ public class HomePage extends javax.swing.JFrame {
                   if(s.startsWith("Completion Type")){
                         String completionTypeOption = "";
                         boolean typeMatched = false;
-                        System.out.println("***************** Completion Type *********");
+                       // System.out.println("***************** Completion Type *********");
                         if(lines[i+1].startsWith("X")){
                         String[] completionTypedate1 = lines[i+1].split(" ");
                         completionTypeOption = completionTypedate1[1].trim() +" "+completionTypedate1[2].trim();
@@ -559,7 +559,7 @@ public class HomePage extends javax.swing.JFrame {
                            String Status = s;
 	        	   String getStatus = Status.replaceAll("Status:", "");
 	        	   status = getStatus.trim();
-                           System.out.println("***************** Status *********"+status);
+                          // System.out.println("***************** Status *********"+status);
                           }
                     
                   
@@ -574,17 +574,17 @@ public class HomePage extends javax.swing.JFrame {
 	        } 
                 catch (IOException e) {
 	          //  e.printStackTrace();
-                      System.out.println("(IOException in PDTtoTextContent method "+aPDFfile+ "-- File"+e);
+                      System.out.println("(IOException in PDTtoTextContent method :"+ PdfName + "-- File"+e);
 	        }
 	        catch (ArrayIndexOutOfBoundsException ex)
 	        {
 	        	// ex.printStackTrace();
-                          System.out.println("(ArrayIndexOutOfBoundsException in PDTtoTextContent method "+aPDFfile+ "-- File"+ex);
+                          System.out.println("ArrayIndexOutOfBoundsException in PDTtoTextContent method: "+ PdfName + "-- File"+ex);
 	        }
                   catch(Exception ex)
                 {
                     // ex.printStackTrace();
-                      System.out.println("Exception in PDTtoTextContent method "+aPDFfile+ "-- File"+ex);
+                      System.out.println("Exception in PDTtoTextContent method:"+ PdfName + "-- File"+ex);
                   
                      
                 }
@@ -1017,7 +1017,7 @@ public class HomePage extends javax.swing.JFrame {
            boolean Start_read_Packer = false ;
            boolean Start_read_Plug = false ;
             int totalPages = pd.getNumberOfPages();
-            System.out.println("Total Pages in Document: " + totalPages);
+          //  System.out.println("Total Pages in Document: " + totalPages);
             if (totalPages > 1) {
                 ObjectExtractor oe = new ObjectExtractor(pd);
                 SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
@@ -1193,7 +1193,7 @@ public class HomePage extends javax.swing.JFrame {
                     for (int i = 0; i < rows.size(); i++) {
 
                         List<RectangularTextContainer> cells = rows.get(i);
-                        System.out.println("-->"+cells.get(0).getText());
+                      //  System.out.println("-->"+cells.get(0).getText());
 
                                 
                          if(cells.get(0).getText().equals("Test Date") )
@@ -1238,7 +1238,7 @@ public class HomePage extends javax.swing.JFrame {
                                        BHPressure =cells.get(10).getText();
                                       // Remark = cells.get(10).getText();
                              
-                               System.out.print(cells.get(0).getText() + "|");    
+                              // System.out.print(cells.get(0).getText() + "|");    
                                 
                             }
                             
@@ -1268,7 +1268,7 @@ public class HomePage extends javax.swing.JFrame {
                                 {
                             if(!cells.get(0).getText().equals("Formation") && !cells.get(0).getText().equals(" "))
                             {
-                                 System.out.print(cells.get(0).getText() + "|");  
+                               //  System.out.print(cells.get(0).getText() + "|");  
                                  Formation = cells.get(0).getText();
                                  Top = cells.get(1).getText();
                                  
@@ -1431,10 +1431,10 @@ public class HomePage extends javax.swing.JFrame {
                                                  
                                         }
                                         
-                                         System.out.print("OrderNo    "+OrderNo);
-   System.out.print("UnitSize    "+UnitSize);
-    System.out.print("From    "+From);
-   System.out.print("To    "+To);
+//                                         System.out.print("OrderNo    "+OrderNo);
+//   System.out.print("UnitSize    "+UnitSize);
+//    System.out.print("From    "+From);
+//   System.out.print("To    "+To);
                                     }
 
                                 }
@@ -1450,7 +1450,7 @@ public class HomePage extends javax.swing.JFrame {
                                 String FormationName = cells.get(0).getText();
                                 for(int in = 0 ; in<cells.size();in++)
                                 {
-                                    System.out.println(cells.get(in).getText());
+                                   // System.out.println(cells.get(in).getText());
                                     if(cells.get(in).getText().startsWith("Code:"))
                                     {
                                           Code = cells.get(in).getText();
@@ -1520,8 +1520,8 @@ public class HomePage extends javax.swing.JFrame {
                                         }
                                     }
                                 }
-  System.out.print("ClassName    "+ClassName);
-   System.out.print("refCode    "+refCode);
+//  System.out.print("ClassName    "+ClassName);
+//   System.out.print("refCode    "+refCode);
                            }
                           }
                         
@@ -1531,17 +1531,17 @@ public class HomePage extends javax.swing.JFrame {
 
                                     AcidVolumes = cells.get(0).getText();
                                     FractureTreatments = cells.get(3).getText();
-                                      System.out.print("AcidVolumes    "+AcidVolumes);
-   System.out.print("FractureTreatments    "+FractureTreatments);
+//                                      System.out.print("AcidVolumes    "+AcidVolumes);
+//   System.out.print("FractureTreatments    "+FractureTreatments);
                                 }
                             }
                         
-   System.out.print("OrderNo  ----   "+OrderNo);
+//   System.out.print("OrderNo  ----   "+OrderNo);
                        if(StartReadAcidval) {
-   System.out.print("check query"+!AcidVolumes.equals("") +"  "+ !OrderNo.equals("") +" "+ !PrerefCode.equalsIgnoreCase(refCode));
+ //  System.out.print("check query"+!AcidVolumes.equals("") +"  "+ !OrderNo.equals("") +" "+ !PrerefCode.equalsIgnoreCase(refCode));
                         if(!AcidVolumes.equals("") && !OrderNo.equals("") && !PrerefCode.equalsIgnoreCase(refCode)){
                                      PrerefCode=refCode;
-                                     System.out.println(" insert call "+(++count));
+                                    // System.out.println(" insert call "+(++count));
                                      if(ClassName.equals("") && refCode.contains("Class:"))
                                      {
                                          String[] temp = refCode.split("Class:");
@@ -1565,7 +1565,7 @@ public class HomePage extends javax.swing.JFrame {
                         }
                         }
                          }
-                        System.out.print("");
+                       // System.out.print("");
                     }
 
                 }
