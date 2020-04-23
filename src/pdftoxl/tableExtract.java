@@ -30,7 +30,7 @@ import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 public class tableExtract {
     public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		final String FILENAME="/Users/prashanth_mani/PDFSamples/1DDA7F7A.pdf";
+		final String FILENAME="/Users/prashanth_mani/Desktop/Temp3/Error/500264886_1707S01W_NW_NW_NW_NE_085211820000__8__2__2013.pdf";
 		
 		PDDocument pd = PDDocument.load(new File(FILENAME));
 		
@@ -38,10 +38,10 @@ public class tableExtract {
 		System.out.println("Total Pages in Document: "+totalPages);
 		
 		ObjectExtractor oe = new ObjectExtractor(pd);
-		SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
+		//SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
                 
-               // BasicExtractionAlgorithm sea = new BasicExtractionAlgorithm();
-		Page page = oe.extract(1);
+                BasicExtractionAlgorithm sea = new BasicExtractionAlgorithm();
+		Page page = oe.extract(2);
 		
 		// extract text from the table after detecting
 		List<Table> table = sea.extract(page);

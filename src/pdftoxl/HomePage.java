@@ -51,7 +51,7 @@ public class HomePage extends javax.swing.JFrame {
         private static String[] CompletionColumns = {"Well ID", "Completion Type","PDFName"};
         private static String[] FormationColumns = {"Well ID", "Formation","Top MD","PDFName"};
         private static String[] InitialPotentialColumns = {"Well ID", "Test Date","Oil Volume","Oil Rate","Gas Volume","Gas Rate","Water Volume","Flow_Type","Flow Pressure","Choke","Remark","PDFName"};
-          private static String[] productionZoneColumns = {"Well ID", "OTC Production Unit No","Formation Name"};
+          private static String[] productionZoneColumns = {"Well ID", "OTC Production Unit No","Formation Name","PDFName"};
 
        private static String[] PerforationColumns = {"Well ID", "Formation Name", "Code","Class", "Top Depth", "Base Depth", "Spacing Order", "Unit Size", "Fracture Treatments", "Acid Volumes", "PDFName"};
 
@@ -568,7 +568,7 @@ public class HomePage extends javax.swing.JFrame {
 
 	            }
              WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,well_type,datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,RecompletionDate,firstprodate,total_depth,drill_type,drill_started,drill_finished,PdfName,Amended));                   
-             productionZone.add(new ProductionZoneDetails(well_id, OTCProductionUnitNo,Formation_Name));     
+             productionZone.add(new ProductionZoneDetails(well_id, OTCProductionUnitNo,Formation_Name,PdfName));     
              reader.close();
             String GetTableExtract = GetTableExtract(aPDFfile, PdfName ,well_id);
 	        } 
@@ -651,6 +651,8 @@ public class HomePage extends javax.swing.JFrame {
                     .setCellValue(produZone.getOTCProductionUnitNo());
              row.createCell(2)
                     .setCellValue(produZone.getFormationName());
+              row.createCell(3)
+                    .setCellValue(produZone.getPDFname());
              
          }
          
@@ -1385,6 +1387,11 @@ public class HomePage extends javax.swing.JFrame {
                                         OrderNo = cells.get(0).getText();
                                         UnitSize = cells.get(0).getText();
                                         From = cells.get(4).getText();
+                                        if(From.equals(""))
+                                        {
+                                            From = cells.get(2).getText();
+                                        }
+                                       
                                         To = cells.get(5).getText();
 
                                     } else {
@@ -1421,11 +1428,16 @@ public class HomePage extends javax.swing.JFrame {
                                             
                                             if(From.equals("")&&To.equals(""))
                                             {
-                                                if(!cells.get(1).equals(""))
+                                                if(!cells.get(1).getText().equals(""))
                                                 {
                                                     From = cells.get(1).getText();
                                                      To = cells.get(4).getText();
+                                                }else if(!cells.get(2).getText().equals(""))
+                                                {
+                                                    From = cells.get(2).getText();
+                                                     To = cells.get(4).getText();
                                                 }
+                                              
                                             }
                                          
                                                  
@@ -1553,14 +1565,17 @@ public class HomePage extends javax.swing.JFrame {
                                      if(To.equals("")&&(!From.equals("")&&(From.contains(" "))))
                                      {
                                          From.trim();
+                                         if(!From.startsWith("There"))
+                                         {
                                            String[] tempData  =  From.split(" ");
                                            From = tempData[0];
                                            To =  tempData[1];
+                                         }
+                                         
                                      }
                             PerforationArray.add(new Perforation(well_id, Formation, refCode, ClassName, From, To, OrderNo, UnitSize, FractureTreatments, AcidVolumes, PdfName));
                                 ClassName ="";
-                                From ="";
-                                To ="";
+                               
                       
                         }
                         }
