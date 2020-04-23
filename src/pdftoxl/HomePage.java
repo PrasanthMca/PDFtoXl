@@ -46,7 +46,7 @@ public class HomePage extends javax.swing.JFrame {
 	private static String[] columns = {"Well ID", "Operator_Name", "Operator_Number","Well_Name", "Well_Number",
                                             "Well_Type","Status","Datum_Elevation","Ground_Elevation",
                                             "Plugback_Depth","Spud_Date","Completion_Date","ReCompletion_Date",
-                                            "FirstProDate","Total_Depth","Drill_Type","Drill_Started","Drill_Finished","PDFName","Amended","Permit Number","Permit Date"};        
+                                            "FirstProDate","Total_Depth","Drill_Type","Drill_Started","Drill_Finished","PDFName","Amended","Location","Permit Number","Permit Date"};        
         private static String[] CasingColumns = {"Well ID", "Type","Casing Size", "Nominal Weight","Grade","Feet","PSI","SAX","Top of Cement","PDFName"};
         private static String[] CompletionColumns = {"Well ID", "Completion Type","PDFName"};
         private static String[] FormationColumns = {"Well ID", "Formation","Top MD","PDFName"};
@@ -275,6 +275,9 @@ public class HomePage extends javax.swing.JFrame {
     	  int Casing_and_Cement_Line = 0;
           int Liner_line = 0;
 	  String OTCProductionUnitNo = "";
+          
+          boolean StartReadLocation = false;
+          String LocationValue = "";
 	  Remark =""; 
 		 //WellArray =  new ArrayList<>();
 		 
@@ -397,12 +400,15 @@ public class HomePage extends javax.swing.JFrame {
 	           }
 	           if( s.startsWith("Location:") ) 
 	           {
+                       
+                       StartReadLocation = true;
                        try{
 	        	 //  System.out.println("***************** Well Name *********");
 	        	   String FirstSalesDate = s;
                            if(FirstSalesDate.contains("First Sales Date:")){
 	        	   String[] splited = FirstSalesDate.split("First Sales Date:");
                            drill_started = splited[1].trim();
+                           LocationValue = splited[0].trim().replace("Location:", "");
                            }
 	        	   
                        }catch(ArrayIndexOutOfBoundsException ex)
@@ -412,10 +418,17 @@ public class HomePage extends javax.swing.JFrame {
 	        	   }
 	        	   
 	           }
+                   if(StartReadLocation)
+                   {
+                   if(!s.startsWith("Location") && !s.startsWith("Derrick") )
+                   LocationValue = LocationValue.concat('\n' +s);
+              
+                   }
 	           
 	           
 	           if( s.startsWith("Derrick")) 
 	           {
+                        StartReadLocation = false;
 	        	  // System.out.println("***************** Derrick *********");
 	        	   String DerrickData = s;
 	        	 String WellNameOnly =   DerrickData.replaceAll("Derrick Elevation:", " ");
@@ -567,7 +580,8 @@ public class HomePage extends javax.swing.JFrame {
 	           i++;
 
 	            }
-             WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,well_type,datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,RecompletionDate,firstprodate,total_depth,drill_type,drill_started,drill_finished,PdfName,Amended));                   
+                   // System.out.println(LocationValue);
+             WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,well_type,datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,RecompletionDate,firstprodate,total_depth,drill_type,drill_started,drill_finished,PdfName,Amended,LocationValue));                   
              productionZone.add(new ProductionZoneDetails(well_id, OTCProductionUnitNo,Formation_Name,PdfName));     
              reader.close();
             String GetTableExtract = GetTableExtract(aPDFfile, PdfName ,well_id);
@@ -703,6 +717,8 @@ public class HomePage extends javax.swing.JFrame {
             .setCellValue(well.getPDFname());
              row.createCell(19)	
             .setCellValue(well.getAmended());
+              row.createCell(20)	
+            .setCellValue(well.getLocationValue());
             
             
         }

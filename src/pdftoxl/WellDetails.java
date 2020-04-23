@@ -181,6 +181,15 @@ public class WellDetails {
 	 private String Drill_Finished;
          private String PDFName;
          private String Amended;
+          private String LocationValue;
+
+    public String getLocationValue() {
+        return LocationValue;
+    }
+
+    public void setLocationValue(String LocationValue) {
+        this.LocationValue = LocationValue;
+    }
 
     public String getAmended() {
         return Amended;
@@ -193,7 +202,7 @@ public class WellDetails {
 	 public WellDetails(String well_id2, String operator_name2, String operator_number2, String well_name2,
 			String well_number2, String status2,String classname, String datum_elevation2, String ground_elevation2,
 			String plugback_depth2, String spud_date2, String completion_date2,String recompletion_date2, String firstprodate2,
-			String total_depth2, String drill_type2, String drill_started2, String drill_finished2,String aPDFname,String aAmended) {
+			String total_depth2, String drill_type2, String drill_started2, String drill_finished2,String aPDFname,String aAmended,String aLocationValue) {
 		 
 		 this.Well_ID = well_id2;
 		 this.Operator_Name = operator_name2;
@@ -213,9 +222,9 @@ public class WellDetails {
 		 this.Drill_Started = drill_started2;
 		 this.Drill_Finished = drill_finished2;
                  this.ReCompletion_Date = recompletion_date2;
-             
                  this.PDFName = aPDFname;
                  this.Amended = aAmended;
+                 this.LocationValue= aLocationValue;
 		 
 		 
 	
