@@ -1035,6 +1035,8 @@ public class HomePage extends javax.swing.JFrame {
            boolean Start_read_Packer = false ;
            boolean Start_read_Plug = false ;
             int totalPages = pd.getNumberOfPages();
+            
+            boolean ReadIntialTestAtFirstPage= false ;
           //  System.out.println("Total Pages in Document: " + totalPages);
             if (totalPages > 1) {
                 ObjectExtractor oe = new ObjectExtractor(pd);
@@ -1193,6 +1195,57 @@ public class HomePage extends javax.swing.JFrame {
                               if(!PlugDepth.equals("@"))
                             PlugArray.add(new PlugDetails(well_id,PlugDepth,PlugType,PdfName));  
                          }
+                        }
+                         
+                         
+                          if(cells.get(0).getText().equals("Test Date") )
+                        {
+                            ReadIntialTestAtFirstPage = true ;
+                        }
+                      if(cells.get(0).getText().contains("1 of "))
+                        {
+                            ReadIntialTestAtFirstPage =false ;
+                        }
+                      
+                        if(ReadIntialTestAtFirstPage)
+                         {
+                             String TesData = "@";
+                             String OilVolume = "";
+                             String OilRate = "";
+                             String GasVolume = "";
+                             String GasRate = "";
+                             String WaterVolume = "";
+                             String FlowType = "";
+                             String FlowPressure = "";
+                             String Choke = "";
+                             String BHPressure = "";
+                            
+                             String PDFName = "";
+
+                              if(cells.size()>10) {
+                                  
+                            if(!cells.get(0).getText().equals("Pressure") && !cells.get(0).getText().equals("Completion and Test Data by Producing Formation") &&
+                                    !cells.get(0).getText().equals("Test Date") && !cells.get(0).getText().equals(" "))
+                            {
+                         
+                                       TesData = cells.get(0).getText();
+                                       OilVolume = cells.get(2).getText();
+                                       OilRate = cells.get(3).getText();
+                                       GasVolume = cells.get(4).getText();
+                                       GasRate = cells.get(5).getText();
+                                       WaterVolume = cells.get(6).getText();
+                                       FlowType = cells.get(7).getText();                         
+                                       FlowPressure = cells.get(8).getText();
+                                       Choke = cells.get(9).getText();
+                                       BHPressure =cells.get(10).getText();
+                                      // Remark = cells.get(10).getText();
+                             
+                              // System.out.print(cells.get(0).getText() + "|");    
+                                
+                            }
+                            if(!TesData.equals("@"))
+                            InitialPotentialArray.add(new InitialPotential(well_id,TesData,OilVolume,OilRate,GasVolume,GasRate,WaterVolume,FlowType,FlowPressure,Choke,BHPressure,Remark,PdfName));
+                        }
                         }
                     }
                 }
