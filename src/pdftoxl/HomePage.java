@@ -50,7 +50,7 @@ public class HomePage extends javax.swing.JFrame {
         private static String[] CasingColumns = {"Well ID", "Type","Casing Size", "Nominal Weight","Grade","Feet","PSI","SAX","Top of Cement","PDFName"};
         private static String[] CompletionColumns = {"Well ID", "Completion Type","PDFName"};
         private static String[] FormationColumns = {"Well ID", "Formation","Top MD","PDFName"};
-        private static String[] InitialPotentialColumns = {"Well ID", "Test Date","Oil Volume","Oil Rate","Gas Volume","Gas Rate","Water Volume","Flow_Type","Flow Pressure","Choke","Remark","PDFName"};
+        private static String[] InitialPotentialColumns = {"Well ID", "Test Date","Formation","Oil Volume","Oil Rate","Gas Volume","Gas Rate","Water Volume","Flow_Type","Flow Pressure","Choke","Remark","PDFName"};
           private static String[] productionZoneColumns = {"Well ID", "OTC Production Unit No","Formation Name","PDFName"};
 
        private static String[] PerforationColumns = {"Well ID", "Formation Name", "Code","Class", "Top Depth", "Base Depth", "Spacing Order", "Unit Size", "Fracture Treatments", "Acid Volumes", "PDFName"};
@@ -830,24 +830,26 @@ public class HomePage extends javax.swing.JFrame {
              row.createCell(1)
                     .setCellValue(initialPotential.getTesData());
               row.createCell(2)
-                    .setCellValue(initialPotential.getOilVolume());
+                       .setCellValue(initialPotential.getFormation());
               row.createCell(3)
-                    .setCellValue(initialPotential.getOilRate());
+                    .setCellValue(initialPotential.getOilVolume());
               row.createCell(4)
+                    .setCellValue(initialPotential.getOilRate());
+              row.createCell(5)
                     .setCellValue(initialPotential.getGasVolume());
-             row.createCell(5)
+             row.createCell(6)
                     .setCellValue(initialPotential.getGasRate());
-              row.createCell(6)
-                    .setCellValue(initialPotential.getWaterVolume());
               row.createCell(7)
+                    .setCellValue(initialPotential.getWaterVolume());
+              row.createCell(8)
                     .setCellValue(initialPotential.getFlowType());
-               row.createCell(8)
+               row.createCell(9)
                     .setCellValue(initialPotential.getFlowPressure());
-              row.createCell(9)
-                    .setCellValue(initialPotential.getChoke());
               row.createCell(10)
-                    .setCellValue(initialPotential.getRemark());
+                    .setCellValue(initialPotential.getChoke());
               row.createCell(11)
+                    .setCellValue(initialPotential.getRemark());
+              row.createCell(12)
                     .setCellValue(initialPotential.getPDFName());
          }
       
@@ -1210,6 +1212,7 @@ public class HomePage extends javax.swing.JFrame {
                         if(ReadIntialTestAtFirstPage)
                          {
                              String TesData = "@";
+                             String InitialFormation = "";
                              String OilVolume = "";
                              String OilRate = "";
                              String GasVolume = "";
@@ -1229,6 +1232,7 @@ public class HomePage extends javax.swing.JFrame {
                             {
                          
                                        TesData = cells.get(0).getText();
+                                       InitialFormation = cells.get(1).getText();
                                        OilVolume = cells.get(2).getText();
                                        OilRate = cells.get(3).getText();
                                        GasVolume = cells.get(4).getText();
@@ -1244,7 +1248,7 @@ public class HomePage extends javax.swing.JFrame {
                                 
                             }
                             if(!TesData.equals("@"))
-                            InitialPotentialArray.add(new InitialPotential(well_id,TesData,OilVolume,OilRate,GasVolume,GasRate,WaterVolume,FlowType,FlowPressure,Choke,BHPressure,Remark,PdfName));
+                            InitialPotentialArray.add(new InitialPotential(well_id,TesData,InitialFormation,OilVolume,OilRate,GasVolume,GasRate,WaterVolume,FlowType,FlowPressure,Choke,BHPressure,Remark,PdfName));
                         }
                         }
                     }
@@ -1288,7 +1292,8 @@ public class HomePage extends javax.swing.JFrame {
                              String FlowPressure = "";
                              String Choke = "";
                              String BHPressure = "";
-                            
+                              String InitialFormation ="" ; 
+
                              String PDFName = "";
 
                               if(cells.size()>10) {
@@ -1298,6 +1303,7 @@ public class HomePage extends javax.swing.JFrame {
                             {
                          
                                        TesData = cells.get(0).getText();
+                                      InitialFormation = cells.get(1).getText();
                                        OilVolume = cells.get(2).getText();
                                        OilRate = cells.get(3).getText();
                                        GasVolume = cells.get(4).getText();
@@ -1315,7 +1321,7 @@ public class HomePage extends javax.swing.JFrame {
                             
                            
                             if(!TesData.equals("@"))
-                            InitialPotentialArray.add(new InitialPotential(well_id,TesData,OilVolume,OilRate,GasVolume,GasRate,WaterVolume,FlowType,FlowPressure,Choke,BHPressure,Remark,PdfName));
+                            InitialPotentialArray.add(new InitialPotential(well_id,TesData,InitialFormation,OilVolume,OilRate,GasVolume,GasRate,WaterVolume,FlowType,FlowPressure,Choke,BHPressure,Remark,PdfName));
 
 
                         }

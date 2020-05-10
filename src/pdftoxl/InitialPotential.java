@@ -11,7 +11,7 @@ package pdftoxl;
  */
 public class InitialPotential {
 
-    InitialPotential(String awell_id, String aTesData, String aOilVolume, String aOilRate, String aGasVolume, String aGasRate, String aWaterVolume, 
+    InitialPotential(String awell_id, String aTesData,String aFormation, String aOilVolume, String aOilRate, String aGasVolume, String aGasRate, String aWaterVolume, 
             String aFlowType, String aFlowPressure, String aChoke, String aBHPressure, String aRemark,String aPdfName) {
 
 
@@ -29,8 +29,17 @@ public class InitialPotential {
          this.BHPressure = aBHPressure;
          this.Remark = aRemark;
          this.PDFName = aPdfName;
+         this.Formation = aFormation;
 
 
+    }
+
+    public String getFormation() {
+        return Formation;
+    }
+
+    public void setFormation(String Formation) {
+        this.Formation = Formation;
     }
 
     /**
@@ -228,6 +237,7 @@ public class InitialPotential {
          private String BHPressure;
          private String Remark;
          private String PDFName;
+         private String Formation;
          
     
 }
