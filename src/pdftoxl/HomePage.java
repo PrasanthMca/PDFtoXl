@@ -415,12 +415,12 @@ public class HomePage extends javax.swing.JFrame {
 	        	   {
 	        		 System.out.println("Error in First Sales Date: "+PdfName);  
                                //  ex.printStackTrace();
-	        	   }
+                           }
 	        	   
 	           }
                    if(StartReadLocation)
                    {
-                   if(!s.startsWith("Location") && !s.startsWith("Derrick") )
+                   if(!s.startsWith(" First Sales Date:") && !s.startsWith("Derrick") )
                    LocationValue = LocationValue.concat('\n' +s);
               
                    }
@@ -580,7 +580,11 @@ public class HomePage extends javax.swing.JFrame {
 	           i++;
 
 	            }
-                   // System.out.println(LocationValue);
+                    //System.out.println(LocationValue);
+                    if(LocationValue.contains("Location:")){
+                        LocationValue = LocationValue.replaceAll("Location:", "");
+                    }
+                        
              WellArray.add(new WellDetails(well_id,operator_name,operator_number,well_name,well_number,status,well_type,datum_elevation,ground_elevation,plugback_depth,spud_date,completion_date,RecompletionDate,firstprodate,total_depth,drill_type,drill_started,drill_finished,PdfName,Amended,LocationValue));                   
              productionZone.add(new ProductionZoneDetails(well_id, OTCProductionUnitNo,Formation_Name,PdfName));     
              reader.close();
@@ -1046,6 +1050,10 @@ public class HomePage extends javax.swing.JFrame {
                  SpreadsheetExtractionAlgorithm PageTWoAlgorithm = new SpreadsheetExtractionAlgorithm();
                 Page PageOne = oe.extract(1);
                 Page PageTwo = oe.extract(2);
+                if(totalPages>3){
+                    Page PageThree = oe.extract(4);
+                }
+                    
                 boolean fasle;
                
 
@@ -1271,7 +1279,7 @@ public class HomePage extends javax.swing.JFrame {
                       //  System.out.println("-->"+cells.get(0).getText());
 
                                 
-                         if(cells.get(0).getText().equals("Test Date") )
+                         if(cells.get(0).getText().equals("Test Date"))
                         {
                             ReadIntialTest =true ;
                         }
@@ -1322,7 +1330,6 @@ public class HomePage extends javax.swing.JFrame {
                            
                             if(!TesData.equals("@"))
                             InitialPotentialArray.add(new InitialPotential(well_id,TesData,InitialFormation,OilVolume,OilRate,GasVolume,GasRate,WaterVolume,FlowType,FlowPressure,Choke,BHPressure,Remark,PdfName));
-
 
                         }
                         }
